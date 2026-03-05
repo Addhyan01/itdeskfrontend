@@ -1,0 +1,79 @@
+/* Simple login page styles */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f6f8fa 0%, #e9eef8 100%);
+  padding: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(22, 31, 41, 0.08);
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.login-card h2 {
+  margin: 0 0 12px 0;
+  font-size: 1.4rem;
+  color: #16323f;
+}
+
+.login-form label {
+  display: block;
+  font-size: 0.9rem;
+  color: #3b4a57;
+  margin: 12px 0 6px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d6dee8;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.login-error {
+  margin-top: 10px;
+  color: #b00020;
+  background: #fff5f6;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.login-btn {
+  margin-top: 16px;
+  width: 100%;
+  padding: 10px 12px;
+  background: #0b66ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.login-footer {
+  margin-top: 14px;
+  font-size: 0.9rem;
+  color: #556270;
+}
+
+.login-footer a {
+  margin-left: 6px;
+  color: #0b66ff;
+  text-decoration: none;
+}

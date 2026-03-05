@@ -1,0 +1,42 @@
+/* Navbar container */
+.navbar {
+  height: 65px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+/* Brand */
+.navbar-brand {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Buttons */
+.navbar .btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 6px 16px;
+  transition: all 0.3s ease;
+}
+
+/* Light buttons */
+.navbar .btn-light {
+  background-color: #ffffff;
+  border: none;
+}
+
+.navbar .btn-light:hover {
+  background-color: #e9ecef;
+  transform: translateY(-1px);
+}
+
+/* New Ticket button */
+.navbar .btn-success {
+  background-color: #28a745;
+  border: none;
+}
+
+.navbar .btn-success:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}

@@ -1,0 +1,63 @@
+/* Page heading */
+
+h3 {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Ticket card */
+
+.ticket-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* Labels */
+
+.ticket-card label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #555;
+}
+
+/* Inputs */
+
+.ticket-card .form-control {
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+/* Input focus */
+
+.ticket-card .form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.15rem rgba(13,110,253,.2);
+}
+
+/* Buttons container */
+
+.ticket-card .btn {
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+/* Hover effect */
+
+.ticket-card .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Alert box (system info) */
+
+.alert-info {
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}

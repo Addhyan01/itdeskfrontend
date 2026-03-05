@@ -1,0 +1,42 @@
+/* Dashboard page */
+
+.container {
+  max-width: 1100px;
+}
+
+/* Heading */
+h3 {
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #2c3e50;
+}
+
+/* Card Design */
+.card {
+  border: none;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+/* Card hover effect */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* Card title */
+.card h5 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+/* Number */
+.card p {
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 8px;
+  color: #007bff;
+}
