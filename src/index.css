@@ -1,28 +1,7 @@
-/* .priority-high{
-
-background:#dc3545;
-color:white;
-padding:4px 8px;
-border-radius:4px;
-font-size:12px;
+*{
+    padding: 0;
+    margin: 0;
+font-family: 'Poppins', sans-serif;
+box-sizing: border-box;
 
 }
-
-.priority-medium{
-
-background:#ffc107;
-padding:4px 8px;
-border-radius:4px;
-font-size:12px;
-
-}
-
-.priority-low{
-
-background:#198754;
-color:white;
-padding:4px 8px;
-border-radius:4px;
-font-size:12px;
-
-} */
