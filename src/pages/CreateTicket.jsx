@@ -1,278 +1,183 @@
-import { useState } from "react"
 import "../styles/createticket.scss"
-import HealthModal from "../component/HealthModule"
-import MeetingModal from "../component/MeetingModual"
 
 export default function CreateTicket(){
 
-const [title,setTitle] = useState("")
-const [description,setDescription] = useState("")
-const [priority,setPriority] = useState("")
-const [category,setCategory] = useState("")
-const [slaDate,setSlaDate] = useState("")
-const [assignedTo,setAssignedTo] = useState("")
-
-const [showHealth,setShowHealth] = useState(false)
-
-const [deviceInfo,setDeviceInfo] = useState(null)
-
-
-const [showMeeting,setShowMeeting] = useState(false)
-
-const [meeting,setMeeting] = useState(null)
-
-const handleSubmit = (e)=>{
-e.preventDefault()
-
-const ticketData = {
-title,
-description,
-priority,
-category,
-slaDate,
-assignedTo
-}
-
-console.log(ticketData)
-alert("Ticket Submitted")
-}
-
 return(
 
-<div className="container mt-4">
+<div className="ticket-page">
 
-<h3 className="mb-3">Create New Ticket</h3>
+<h3 className="ticket-title">
+Ticket <span className="ticket-id">#9712</span> (Creating...)
+</h3>
 
-<div className="ticket-card">
+<div className="ticket-layout">
 
-<form onSubmit={handleSubmit}>
+{/* LEFT SIDE */}
 
-{/* Title */}
+<div className="ticket-left">
 
-<div className="mb-3">
+{/* Customer Information */}
 
-<label className="form-label">Title</label>
+<div className="card-box">
 
-<input
-type="text"
-className="form-control"
-placeholder="Enter ticket title"
-value={title}
-onChange={(e)=>setTitle(e.target.value)}
-/>
+<div className="card-header">
+Customer Information <span className="vip">VIP</span>
+</div>
+
+<div className="customer-grid">
+
+<div>
+<label>First Name</label>
+<p>Dr. Jane</p>
+</div>
+
+<div>
+<label>Last Name</label>
+<p>Wells</p>
+</div>
+
+<div>
+<label>Phone</label>
+<p>(650) 226-1228</p>
+</div>
+
+<div>
+<label>Email Address</label>
+<p>jwells@stanford.edu</p>
+</div>
+
+<div>
+<label>Location</label>
+<p>Palo Alto</p>
+</div>
 
 </div>
 
-
-{/* Row fields */}
-
-<div className="row">
-
-<div className="col-md-3 mb-3">
-
-<label>SLA Due Date</label>
-
-<input
-type="date"
-className="form-control"
-value={slaDate}
-onChange={(e)=>setSlaDate(e.target.value)}
-/>
-
 </div>
 
+{/* Nature of Request */}
 
-<div className="col-md-3 mb-3">
+<div className="card-box">
 
-<label>Category</label>
+<label className="labels">Nature of Request</label>
 
-<select
-className="form-control"
-value={category}
-onChange={(e)=>setCategory(e.target.value)}
->
+<select className="form-input-drop">
 
-<option>Select Category</option>
-<option>Hardware</option>
-<option>Software</option>
-<option>Network</option>
-<option>Other</option>
+<option>Applications-CommonEpic eHealthRecord</option>
 
 </select>
 
 </div>
 
+{/* Subject */}
 
-<div className="col-md-3 mb-3">
+<div className="card-box">
 
-<label>Priority</label>
-
-<select
-className="form-control"
-value={priority}
-onChange={(e)=>setPriority(e.target.value)}
->
-
-<option>Select Priority</option>
-<option>Low</option>
-<option>Medium</option>
-<option>High</option>
-
-</select>
-
-</div>
-
-
-<div className="col-md-3 mb-3">
-
-<label>Assigned To</label>
-
-<select
-className="form-control"
-value={assignedTo}
-onChange={(e)=>setAssignedTo(e.target.value)}
->
-
-<option>Select Technician</option>
-<option>Tech 1</option>
-<option>Tech 2</option>
-
-</select>
-
-</div>
-
-</div>
-
-
-{/* Attachment */}
-
-<div className="mb-3">
-
-<label>Attachments</label>
-
-<input type="file" className="form-control"/>
-
-</div>
-
-
-{/* Description */}
-
-<div className="mb-3">
-
-<label>Description</label>
+<p style={{width:"25px"}}>Subject</p>
 
 <textarea
-rows="4"
-className="form-control"
-placeholder="Describe your issue"
-value={description}
-onChange={(e)=>setDescription(e.target.value)}
+className="form-input"
+placeholder="Enter a description..."
 ></textarea>
 
 </div>
 
+{/* Details */}
+
+<div className="card-box">
+
+<h4>Details</h4>
+
+<div className="details-grid">
+
+<div>
+<label>Severity Level</label>
+<p className="link">4 - Service Request</p>
+</div>
+
+<div>
+<label>Status</label>
+<p className="link">New</p>
+</div>
+
+<div>
+<label>Service Group</label>
+<p className="link">Applications-Clinical/Medical</p>
+</div>
+
+<div>
+<label>Assignee</label>
+<p className="link">unassigned</p>
+</div>
+
+<div>
+<label>Root Cause</label>
+<p className="link">none</p>
+</div>
+
+</div>
+
+</div>
+
+{/* Notes */}
+
+<div className="notes-grid">
+
+<div className="card-box">
+<label>Public Note</label>
+<textarea className="form-input"/>
+</div>
+
+<div className="card-box">
+<label>Private Note</label>
+<textarea className="form-input"/>
+</div>
+
+</div>
 
 {/* Buttons */}
 
-<div className="d-flex gap-2">
+<div className="ticket-buttons">
 
-<button type="button" className="btn btn-secondary">
-
-AI Troubleshoot
-
-</button>
-
-<button
-type="button"
-className="btn btn-primary"
-onClick={()=>setShowMeeting(true)}
->
-
-Schedule Call Addhyan
-
-</button>
-
-<button type="submit" className="btn btn-success">
-
-Submit Ticket
-
-</button>
-
-<button type="button" className="btn btn-outline-danger">
-
-Cancel
-
-</button>
-<button
-type="button"
-className="btn btn-info"
-onClick={()=>setShowHealth(true)}
->
-
-System Health
-
-</button>
-</div>
-
-</form>
-
-</div>
-<HealthModal
-show={showHealth}
-onClose={()=>setShowHealth(false)}
-onAttach={(data)=>{
-
-setDeviceInfo(data)
-
-setShowHealth(false)
-
-}}
-/>
-
-
-{meeting && (
-
-<div className="alert alert-info mt-3">
-
-<h6>Scheduled Call</h6>
-
-<p><b>Title:</b> {meeting.title}</p>
-
-<p><b>Technician:</b> {meeting.attendee}</p>
-
-<p><b>Date:</b> {meeting.date}</p>
-
-<p><b>Time:</b> {meeting.startTime} - {meeting.endTime}</p>
+<button className="btn-green">Create</button>
+<button className="btn-green">Create & Print</button>
+<button className="btn-link">Cancel</button>
 
 </div>
 
-)}
-<MeetingModal
-show={showMeeting}
-onClose={()=>setShowMeeting(false)}
-onSchedule={(data)=>setMeeting(data)}
-/>
-{deviceInfo && (
+</div>
 
-<div className="alert alert-info mt-3">
+{/* RIGHT SIDEBAR */}
 
-<h6>Attached System Info</h6>
+<div className="ticket-right">
 
-<p>RAM: {deviceInfo.ram}</p>
+<h4>Customer</h4>
 
-<p>CPU: {deviceInfo.cpu}</p>
+<p className="link">Dr. Jane Wells</p>
+<p>(650) 226-1228</p>
 
-<p>Battery: {deviceInfo.battery}</p>
+<hr/>
 
-<p>Network: {deviceInfo.network}</p>
+<p><b>Severity level</b></p>
+<p className="link">4 - Service Request</p>
+
+<p><b>Status</b></p>
+<p className="link">New</p>
+
+<p><b>Service group</b></p>
+<p className="link">Applications-Clinical/Medical</p>
+
+<p><b>Assigned to</b></p>
+<p className="link">unassigned</p>
+
+<p><b>Root cause</b></p>
+<p>none</p>
 
 </div>
 
-)}
-
 </div>
 
-
+</div>
 
 )
 

@@ -1,63 +1,106 @@
-/* Page heading */
-
-h3 {
-  font-weight: 600;
-  color: #2c3e50;
+.ticket-page{
+padding:20px;
+background:#f4f4f4;
 }
 
-/* Ticket card */
-
-.ticket-card {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+.ticket-title{
+margin-bottom:20px;
 }
 
-/* Labels */
-
-.ticket-card label {
-  font-weight: 500;
-  margin-bottom: 4px;
-  color: #555;
+.ticket-id{
+color:#7bc043;
 }
 
-/* Inputs */
-
-.ticket-card .form-control {
-  border-radius: 8px;
-  border: 1px solid #dcdcdc;
-  padding: 8px 12px;
-  transition: all 0.2s ease;
+.ticket-layout{
+display:flex;
+gap:20px;
 }
 
-/* Input focus */
-
-.ticket-card .form-control:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 0.15rem rgba(13,110,253,.2);
+.ticket-left{
+flex:3;
 }
 
-/* Buttons container */
-
-.ticket-card .btn {
-  border-radius: 8px;
-  padding: 7px 16px;
-  font-weight: 500;
-  transition: all 0.25s ease;
+.ticket-right{
+flex:1;
+background:#f1f1f1;
+padding:20px;
+border-radius:4px;
 }
 
-/* Hover effect */
-
-.ticket-card .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+.card-box{
+background:white;
+border:1px solid #ddd;
+padding:20px;
+margin-bottom:15px;
 }
 
-/* Alert box (system info) */
+.card-header{
+font-weight:600;
+color:#b63b3b;
+margin-bottom:10px;
+}
 
-.alert-info {
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+.vip{
+border:1px solid red;
+padding:2px 6px;
+font-size:12px;
+margin-left:10px;
+}
+
+.customer-grid{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:20px;
+}
+
+.details-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.notes-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+.form-input{
+width:50%;
+padding:10px;
+border:1px solid #ccc;
+border-radius:3px;
+}
+
+textarea{
+height:80px;
+}
+
+.ticket-buttons{
+margin-top:20px;
+}
+
+.btn-green{
+background:#7bc043;
+color:white;
+border:none;
+padding:8px 15px;
+margin-right:10px;
+cursor:pointer;
+}
+
+.btn-link{
+background:none;
+border:none;
+color:#3b82f6;
+cursor:pointer;
+}
+
+.link{
+color:#2c7be5;
+cursor:pointer;
+}
+
+.labels{
+  padding-right: 20px;
 }

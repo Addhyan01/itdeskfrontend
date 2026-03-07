@@ -1,42 +1,99 @@
-/* Navbar container */
-.navbar {
-  height: 65px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+.profile{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content:   space-between;
+    padding: 10px 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.profile-button{
+    display: flex;
+    align-items: center;
+    background: none;
+    justify-content: space-between;
+    border: none;
+    cursor: pointer;
+}
+.nav-right{
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-/* Brand */
-.navbar-brand {
+.icon{
+    display: flex;
+    font-size: 20px;
+    gap: 20px;
+    color: #555;
+}
+.navbar input[type="text"]{
+    background-color: rgb(249,250, 251);
+    color: rgb(210, 212, 219);
+    width: 400px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+.usericon{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.username{
+    padding-right: 10px;
+}
+.dot {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 10px;
+  width: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+.notification {
+ position: relative;
+  display: inline-block;
   font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 1px;
+  cursor: pointer;
+
+}
+.line{
+  width:1px;
+  height:40px;
+  background:#ccc;
+}
+.profile-wrapper{
+  position: relative;
 }
 
-/* Buttons */
-.navbar .btn {
+.dropdown{
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 150px;
+  background: white;
   border-radius: 8px;
-  font-weight: 500;
-  padding: 6px 16px;
-  transition: all 0.3s ease;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  
 }
 
-/* Light buttons */
-.navbar .btn-light {
-  background-color: #ffffff;
-  border: none;
+.dropdown a,
+.dropdown p{
+  padding: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
 }
 
-.navbar .btn-light:hover {
-  background-color: #e9ecef;
-  transform: translateY(-1px);
-}
-
-/* New Ticket button */
-.navbar .btn-success {
-  background-color: #28a745;
-  border: none;
-}
-
-.navbar .btn-success:hover {
-  background-color: #218838;
-  transform: translateY(-1px);
+.dropdown a:hover,
+.dropdown p:hover{
+  background: #f5f5f5;
 }
