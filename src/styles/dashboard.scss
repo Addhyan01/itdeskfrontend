@@ -20,10 +20,12 @@ margin-bottom:20px;
 .stat{
 padding:20px;
 border-radius:10px;
-color:white;
-text-align:center;
-font-weight:600;
+
+// color:white;
+// text-align:center;
+// font-weight:600;
 box-shadow:0 2px 6px rgba(0,0,0,0.1);
+background-color: #fff;
 }
 
 .stat h2{
@@ -173,3 +175,99 @@ gap:10px;
 .inflow span{
 font-size:12px;
 }
+
+.dashboard-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+.form-select{
+padding:5px 10px;
+width: 100%;
+border:1px solid #ccc;
+// border-radius:5px;   
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.Export{
+    padding: 5px;
+    width: 100px;
+background-color: #7C3AED;
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.dashboard-actions{
+display: flex;
+gap: 10px;
+align-items: center;
+}
+
+
+
+.stat-top{
+display: flex;
+justify-content: space-between;
+
+align-items: center;
+}
+
+.stat-icon{
+font-size: 20px;
+color: #7C3AED;
+padding: 10px;
+background-color:#f3e8ff;
+
+border-radius: 9%;
+}
+.card-number{
+    font-size:25px;
+  font-weight:500;
+  color:#1f2937;
+  margin-top:5px;
+}
+
+.card-title{
+  font-size:14px;
+  font-weight:400;
+  color:#6b7280;
+  font-family: "Inter", sans-serif;
+}
+
+.card-stats{
+  margin-top:12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.badge-success{
+  background:#dcfce7;
+  color:#16a34a;
+  font-size:12px;
+  padding:4px 8px;
+  border-radius:20px;
+  font-weight:600;
+}
+
+.card-subtext{
+  font-size:13px;
+  color:#9ca3af;
+}
+
+.badge-danger{
+  background:#fee2e2;
+  color:#dc2626;
+  font-size:12px;
+  padding:4px 8px;
+  border-radius:20px;
+  font-weight:600;
+}
+
+
+// .icon-yellow{
+//   // background:#fef3c7;
+//   color:#d97706;
+// }

@@ -4,7 +4,6 @@
     border-radius: 50%;
 }
 .navbar{
-    width: 85%;
     display: flex;
     align-items: center;
     justify-content:   space-between;
@@ -82,13 +81,14 @@
   width: 150px;
   background: white;
   border-radius: 8px;
+  padding: 10px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.1);
   
 }
 
 .dropdown a,
 .dropdown p{
-  padding: 5px;
+  padding: 8px;
   cursor: pointer;
   text-decoration: none;
   color: black;

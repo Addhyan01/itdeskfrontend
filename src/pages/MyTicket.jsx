@@ -7,7 +7,7 @@ return(
 
 <div>
 
-<Navbar/>
+
 
 <div className="container mt-4">
 

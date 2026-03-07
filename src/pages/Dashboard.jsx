@@ -1,31 +1,160 @@
+import { faDownload,  } from "@fortawesome/free-solid-svg-icons"
+// import { faTicket} from '@fortawesome/free-regular-svg-icons'
+import { faTicket,faClock } from '@fortawesome/free-solid-svg-icons'
+
 import Navbar from "../component/Navbar"
 import "../styles/dashboard.scss"
+import MyTickets from "./MyTicket"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {  faClockFour } from "@fortawesome/free-regular-svg-icons"
 
 export default function Dashboard() {
 
 return (
 
+
+
+
 <div className="dashboard">
 
-<Navbar/>
 
 <div className="dashboard-container">
+
+    <div className="dashboard-header">  
+        <div>
+            <h1>Good Morning</h1>
+<p>Here's what's happening in the support center today.</p>
+        </div>
+        <div className="dashboard-actions">
+             <select name="severity"  className="form-select">
+<option>Today</option>
+<option>Yesterday</option>
+<option>Last 7 days</option>
+<option>Last 30 days</option>
+<option>Last 90 days</option>
+</select>
+
+<button className="Export"><FontAwesomeIcon icon={faDownload} /> Export</button>
+
+        </div>
+
+    </div>
 
 {/* TOP STATS */}
 
 <div className="top-stats">
 
-<div className="stat red">
-<h2>48</h2>
-<p>Tasks Overdue</p>
+<div className="stat ">
+
+    <div className="stat-top">
+    <div className="start-text">
+        <p className="card-title">Total Ticket</p>
+        <h3 className="card-number">1,245</h3>
+    </div>
+    <div className="stat-icon">
+        <FontAwesomeIcon icon={faTicket} />
+
+    </div>
+    </div>
+    
+    <div class="card-stats">
+    <span class="badge-success">↑ 12%</span>
+    <span class="card-subtext">vs last month</span>
+ </div>
+
 </div>
 
-<div className="stat green">
+
+
+<div className="stat  ">
+
+    <div className="stat-top">
+    <div className="start-text">
+        <p className="card-title">Pending Assign</p>
+        <h3 className="card-number">45</h3>
+    </div>
+    <div className="stat-icon icon-yellow">
+        <FontAwesomeIcon icon={faClock} />
+
+    </div>
+    </div>
+    
+    <div class="card-stats">
+    <span class="badge-danger">↓ 12%</span>
+    <span class="card-subtext">vs last month</span>
+ </div>
+
+</div>
+
+
+<div className="stat ">
+
+    <div className="stat-top">
+    <div className="start-text">
+        <p className="card-title">Total Ticket</p>
+        <h3 className="card-number">1,245</h3>
+    </div>
+    <div className="stat-icon">
+        <FontAwesomeIcon icon={faTicket} />
+
+    </div>
+    </div>
+    
+    <div class="card-stats">
+    <span class="badge-success">↑ 12%</span>
+    <span class="card-subtext">vs last month</span>
+ </div>
+
+</div>
+
+
+<div className="stat ">
+
+    <div className="stat-top">
+    <div className="start-text">
+        <p className="card-title">Total Ticket</p>
+        <h3 className="card-number">1,245</h3>
+    </div>
+    <div className="stat-icon">
+        <FontAwesomeIcon icon={faTicket} />
+
+    </div>
+    </div>
+    
+    <div class="card-stats">
+    <span class="badge-success">↑ 12%</span>
+    <span class="card-subtext">vs last month</span>
+ </div>
+
+</div>  
+
+
+<div className="stat ">
+
+    <div className="stat-top">
+    <div className="start-text">
+        <p className="card-title">Total Ticket</p>
+        <h3 className="card-number">1,245</h3>
+    </div>
+    <div className="stat-icon">
+        <FontAwesomeIcon icon={faTicket} />
+
+    </div>
+    </div>
+    
+    <div class="card-stats">
+    <span class="badge-success">↑ 12%</span>
+    <span class="card-subtext">vs last month</span>
+ </div>
+
+</div>
+
+{/* <div className="stat green">
 <h2>1</h2>
 <p>Tasks Due This week</p>
-</div>
+</div> */}
 
-<div className="stat gradient">
+{/* <div className="stat gradient">
 <div className="multi-stat">
 
 <div>
@@ -44,17 +173,17 @@ return (
 </div>
 
 </div>
-</div>
+</div> */}
 
-<div className="stat blue">
+{/* <div className="stat blue">
 <h2>2</h2>
 <p>Req. Due Today</p>
-</div>
-
+</div> */}
+{/* 
 <div className="stat sky">
 <h2>94</h2>
 <p>Technician Unassigned</p>
-</div>
+</div> */}
 
 </div>
 
@@ -192,8 +321,8 @@ return (
 </div>
 
 </div>
-
 </div>
+
 
 )
 }
