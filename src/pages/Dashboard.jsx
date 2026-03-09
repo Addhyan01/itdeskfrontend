@@ -1,4 +1,4 @@
-import { faDownload,  } from "@fortawesome/free-solid-svg-icons"
+import { faBusinessTime, faCircleCheck, faDownload, faStopwatch,  } from "@fortawesome/free-solid-svg-icons"
 // import { faTicket} from '@fortawesome/free-regular-svg-icons'
 import { faTicket,faClock } from '@fortawesome/free-solid-svg-icons'
 
@@ -7,8 +7,43 @@ import "../styles/dashboard.scss"
 import MyTickets from "./MyTicket"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {  faClockFour } from "@fortawesome/free-regular-svg-icons"
+import addhyan from "../asset/addhyan.jpeg"
+import ChartComponent from "../component/ChartComponent"
+import ChartDataComponent from "../component/ChartDataComponent"
 
 export default function Dashboard() {
+
+
+    const technicians = [
+        {
+          name: "Sarah Jenkins",
+          role: "Network Specialist",
+          status: "Available",
+          activeTickets: 0,
+          avatar: addhyan
+        },
+        {
+          name: "Michael Lee",
+          role: "System Administrator",
+          status: "Busy",
+          activeTickets: 3,
+          avatar: addhyan
+        },
+        {
+          name: "Emily Davis",
+          role: "Help Desk Technician",
+          status: "Available",
+          activeTickets: 1,
+          avatar: addhyan
+        },
+        {
+          name: "David Wilson",
+          role: "IT Support Specialist",
+          status: "Busy",
+          activeTickets: 5,
+          avatar: addhyan
+        }
+      ];
 
 return (
 
@@ -51,7 +86,7 @@ return (
         <p className="card-title">Total Ticket</p>
         <h3 className="card-number">1,245</h3>
     </div>
-    <div className="stat-icon">
+    <div className="stat-icon icon-purple">
         <FontAwesomeIcon icon={faTicket} />
 
     </div>
@@ -91,17 +126,17 @@ return (
 
     <div className="stat-top">
     <div className="start-text">
-        <p className="card-title">Total Ticket</p>
-        <h3 className="card-number">1,245</h3>
+        <p className="card-title">Resolved Today</p>
+        <h3 className="card-number">82</h3>
     </div>
-    <div className="stat-icon">
-        <FontAwesomeIcon icon={faTicket} />
+    <div className="stat-icon icon-green">
+        <FontAwesomeIcon icon={faCircleCheck} />
 
     </div>
     </div>
     
     <div class="card-stats">
-    <span class="badge-success">↑ 12%</span>
+    <span class="badge-success">↑ 18%</span>
     <span class="card-subtext">vs last month</span>
  </div>
 
@@ -112,11 +147,11 @@ return (
 
     <div className="stat-top">
     <div className="start-text">
-        <p className="card-title">Total Ticket</p>
-        <h3 className="card-number">1,245</h3>
+        <p className="card-title">Avg. Resolution </p>
+        <h3 className="card-number">1.5h</h3>
     </div>
-    <div className="stat-icon">
-        <FontAwesomeIcon icon={faTicket} />
+    <div className="stat-icon icon-blue">
+        <FontAwesomeIcon icon={faStopwatch} />
 
     </div>
     </div>
@@ -129,15 +164,15 @@ return (
 </div>  
 
 
-<div className="stat ">
+<div className="stat  ">
 
     <div className="stat-top">
     <div className="start-text">
-        <p className="card-title">Total Ticket</p>
-        <h3 className="card-number">1,245</h3>
+        <p className="card-title">Overdue Tickets</p>
+        <h3 className="card-number">15</h3>
     </div>
-    <div className="stat-icon">
-        <FontAwesomeIcon icon={faTicket} />
+    <div className="stat-icon icon-red">
+        <FontAwesomeIcon icon={faBusinessTime} />
 
     </div>
     </div>
@@ -189,6 +224,118 @@ return (
 
 
 {/* MAIN SECTION */}
+
+{/* Addhyan main grid for two column layout and right stats panel */} 
+
+<div className="main-grid-new">
+        <div className="main-left">
+            <ChartDataComponent  />
+
+        </div>
+
+
+        <div className="main-right">
+            <h4>Technician Status</h4>
+            {/* Technician status section */ }
+            {technicians.map((tech, index) => (
+                <div class="tech-item" key={index}>
+
+                    <div class="tech-left">
+                        <div class="avatar">
+                            <img src={tech.avatar} />
+                            <span class={`status-dot ${tech.status === "Available" ? "online" : "busy"}`}></span>
+                        </div>
+
+                        <div class="tech-info">
+                            <h4 className="card-title card-font">{tech.name}</h4>
+                            <p className="card-title">{tech.role}</p>
+                        </div>
+                    </div>
+
+                    <div class="tech-right">
+                        <span class={`badge ${tech.status === "Available" ? "available" : "busy"}`}>{tech.status}</span>
+                        <p class="ticket-count">{tech.activeTickets} Active Tickets</p>
+                    </div>
+                </div>
+            ))}   
+
+            <div><button className="create-button">View All </button></div>
+
+
+            </div>
+
+</div>
+
+
+<div className="main-grid-two">
+    <div className="main-left-two">
+        <h4>Recent Tickets</h4>
+        <ChartComponent />
+        </div>
+    <div className="main-left-two">
+        <h4>Recent <span className="    ">Critical</span>  Task</h4>
+            <table className="recent-tasks-table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>ID</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                    </tr>
+
+
+
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Application access issue</td>
+                        <td>2119197</td>
+                        <td>Open</td>
+                        <td><span className="badge badge-critical">Critical</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>Upgrade VM plan</td>
+                        <td>2119196</td>
+                        <td>Open</td>
+                        <td><span className="badge badge-high">High</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>Cancel existing VM plan</td>
+                        <td>2119192</td>
+                        <td>Open</td>
+                        <td><span className="badge badge-high">High</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>Upgrade VM plan</td>
+                        <td>2119188</td>
+                        <td>Open</td>
+                        <td><span className="badge badge-high">High</span></td>
+                    </tr>
+
+                </tbody>
+
+            </table>    
+
+            <div><button className="create-button">View All</button></div>
+    </div>
+    <div className="main-left-two">
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
 
 <div className="main-grid">
 
@@ -284,8 +431,8 @@ return (
 <div className="side-stats">
 
 <div className="side-card yellow">
-<h2>3</h2>
-<p>Reopened</p>
+<h2 className="card-number">11</h2>
+<p className="card-title">Pending Assignment</p>
 </div>
 
 <div className="side-card purple">

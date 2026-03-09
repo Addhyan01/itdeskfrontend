@@ -1,96 +1,101 @@
 import { useState } from "react"
 import "../styles/ticketable.scss"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons"
 
-export default function TicketTable(){
+export default function TicketTable() {
 
-const [search,setSearch] = useState("")
+    const [search, setSearch] = useState("")
 
-const tickets = [
+    const tickets = [
 
-{
-title:"WiFi not working",
-priority:"High",
-status:"Open"
-},
+        {
+            title: "WiFi not working",
+            priority: "High",
+            status: "Open",
+             created: "2024-06-01"
+        },
 
-{
-title:"Laptop slow",
-priority:"Medium",
-status:"In Progress"
-},
+        {
+            title: "Laptop slow",
+            priority: "Medium",
+            status: "In Progress",  
+             created: "2024-06-01"
+        },
 
-{
-title:"Software crash",
-priority:"Low",
-status:"Resolved"
-}
+        {
+            title: "Software crash",
+            priority: "Low",
+            status: "Resolved",
+            created: "2024-06-01"
+        }
 
-]
+    ]
 
-const filteredTickets = tickets.filter(ticket =>
-ticket.title.toLowerCase().includes(search.toLowerCase())
-)
+    const filteredTickets = tickets.filter(ticket =>
+        ticket.title.toLowerCase().includes(search.toLowerCase())
+    )
 
-return(
+    return (
 
-<div className="ticket-table">
+        <div className="ticket-table">
 
-<div className="table-header">
 
-<input
-type="text"
-placeholder="Search ticket..."
-className="form-control search-box"
-value={search}
-onChange={(e)=>setSearch(e.target.value)}
-/>
+            <table className="table table-hover">
 
-</div>
+                <thead>
 
-<table className="table table-hover">
+                    <tr>
+                        <th> Number</th>
 
-<thead>
+                        <th>Title</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Created date</th>
+                        <th>Action</th>
+                        
 
-<tr>
+                    </tr>
 
-<th>Title</th>
-<th>Priority</th>
-<th>Status</th>
+                </thead>
 
-</tr>
+                <tbody>
 
-</thead>
+                    {filteredTickets.map((ticket, i) => (
 
-<tbody>
+                        <tr key={i}>
+                            <td>{i + 1}</td>
+                            
 
-{filteredTickets.map((ticket,i)=>(
+                            <td>{ticket.title}</td>
 
-<tr key={i}>
+                            <td>
+                                <span className={`priority-badge ${ticket.priority.toLowerCase()}`}>
+                                    {ticket.priority}
+                                </span>
+                            </td>
 
-<td>{ticket.title}</td>
+                            <td>
+                                <span className={`status-badge ${ticket.status.replace(" ", "").toLowerCase()}`}>
+                                    {ticket.status}
+                                </span>
+                            </td>   
+                            <td>{ticket.created}</td>
+                            
+                            <td>
+                                <button className="button-three-dots"> <FontAwesomeIcon icon={faEllipsis} /></button>
+                            </td>
 
-<td>
-<span className={`priority-badge ${ticket.priority.toLowerCase()}`}>
-{ticket.priority}
-</span>
-</td>
+                        </tr>
 
-<td>
-<span className={`status-badge ${ticket.status.replace(" ","").toLowerCase()}`}>
-{ticket.status}
-</span>
-</td>
+                    ))}
 
-</tr>
+                </tbody>
 
-))}
+            </table>
 
-</tbody>
+        </div>
 
-</table>
-
-</div>
-
-)
+    )
 
 }

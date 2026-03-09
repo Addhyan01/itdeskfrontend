@@ -5,6 +5,7 @@ import DashboardLayout from "./layout/dashboardLayout"
 import Dashboard from "./pages/Dashboard"
 import MyTicket from "./pages/MyTicket"
 import CreateTicket from "./pages/CreateTickets"
+import Login from "./Login/Login"
 
 // import Dashboard from "./pages/Dashboard";
 
@@ -17,7 +18,7 @@ return(
       <Routes>
 
         {/* Login page (no sidebar) */}
-        {/* <Route path="/" element={<Login />} /> */}
+        <Route path="/" element={<Login />} />
 
         {/* Dashboard Layout */}
         <Route path="/dashboard" element={<DashboardLayout />}>

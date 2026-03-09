@@ -216,9 +216,9 @@ align-items: center;
 
 .stat-icon{
 font-size: 20px;
-color: #7C3AED;
+// color: #7C3AED;
 padding: 10px;
-background-color:#f3e8ff;
+// background-color:#f3e8ff;
 
 border-radius: 9%;
 }
@@ -271,3 +271,164 @@ border-radius: 9%;
 //   // background:#fef3c7;
 //   color:#d97706;
 // }
+
+
+.icon-yellow{
+  background:#fef3c7;
+  color:#d97706;
+}
+.icon-green{
+  background:#dcfce7;
+  color:#16a34a;
+}
+.icon-purple{
+  background:#f3e8ff;
+  color:#7c3aed;
+} .icon-blue{
+  background:#dbeafe;
+  color:#2563eb;
+}
+.icon-red{
+  background:#fee2e2;
+  color:#dc2626;
+}
+
+
+
+.main-grid-new{
+display:grid;
+grid-template-columns: 2fr 1fr;
+gap:20px;
+}
+
+
+.main-left{
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1); 
+height: 400px;
+}
+.main-right{
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1); 
+height: 500px;
+}
+
+.tech-card{
+background:#f8f9fb;
+padding:25px;
+border-radius:16px;
+box-shadow:0 4px 15px rgba(0,0,0,0.08);
+width:420px;
+}
+.tech-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 0;
+border-bottom:1px solid #eee;
+}
+.tech-left{
+display:flex;
+align-items:center;
+gap:15px;
+}
+.avatar{
+position:relative;
+}
+
+.avatar img{
+width:50px;
+height:50px;
+border-radius:50%;
+}
+.status-dot{
+position:absolute;
+bottom:0;
+right:0;
+width:12px;
+height:12px;
+border-radius:50%;
+border:2px solid white;
+}
+
+.online{
+background:#22c55e;
+}
+
+.busy{
+background:#facc15;
+}
+
+.offline{
+background:#ef4444;
+}
+.badge{
+padding:6px 14px;
+border-radius:8px;
+font-size:14px;
+font-weight:500;
+}
+
+.available{
+background:#e8f7ee;
+color:#16a34a;
+}
+
+.busy{
+background:#fef3c7;
+color:#b45309;
+}
+
+.offline{
+background:#fde2e2;
+color:#dc2626;
+}
+.ticket-count{
+font-size:14px;
+color:#6b7280;
+margin-top:5px;
+}
+.view-btn{
+margin-top:20px;
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid #ddd;
+background:white;
+cursor:pointer;
+}
+
+.card-font{
+  font-weight: 600;
+}
+
+.create-button{
+margin-top:20px;
+padding:12px 20px;
+background-color:#7C3AED;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+width: 100%;
+}
+
+.main-grid-two{
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.main-left-two{
+background:white;
+padding:15px;
+border-radius:10px;     
+
+}
+.critical{
+  color :#dc2626;
+}

@@ -1,183 +1,338 @@
+import { useState } from "react"
 import "../styles/createticket.scss"
+import HealthModal from "../component/HealthModule"
+import MeetingModal from "../component/MeetingModual"
+import { analyzeIssue, createTicket } from "../services/api"
+import Aimodal from "../component/Aimodal"
+
 
 export default function CreateTicket(){
 
+const [title,setTitle] = useState("")
+const [description,setDescription] = useState("")
+const [priority,setPriority] = useState("")
+const [category,setCategory] = useState("")
+const [slaDate,setSlaDate] = useState("")
+const [assignedTo,setAssignedTo] = useState("")
+const [attachments,setAttachments] = useState("")
+const [comments,setComments] = useState("")
+
+const [showHealth,setShowHealth] = useState(false)
+
+const [showaIssist,setShowAIAssist] = useState(false)
+
+const [deviceInfo,setDeviceInfo] = useState(null)
+
+const [showMeeting,setShowMeeting] = useState(false)
+const [solutions,setSolutions] = useState([])
+const [loading,setLoading] = useState(false)
+const [analysis,setAnalysis] = useState(null)
+
+const [meeting,setMeeting] = useState(null)
+
+const handleSubmit = (e)=>{
+e.preventDefault()
+
+const ticketData = {
+title,
+description,
+priority,
+category,
+slaDate,
+assignedTo,
+comments
+}
+
+console.log(ticketData)
+alert("Ticket Submitted")
+}
+
+
+const handleAnalyze = async () => {
+    if (!description.trim()) {
+        alert("Please enter a description first")
+        return
+    }
+    
+    setLoading(true)
+    
+    try {
+        const res = await analyzeIssue(description)
+
+        if(res.success){
+            setCategory(res.analysis.category)
+            setPriority(res.analysis.priority)
+            setSolutions(res.analysis.solution)
+            setAnalysis(res.analysis)
+        } else {
+            alert("Failed to analyze issue")
+        }
+    } catch (error) {
+        console.error("Analysis error:", error)
+        alert("Error analyzing issue")
+    } finally {
+        setLoading(false)
+    }
+}
+
 return(
 
-<div className="ticket-page">
+<div className="container mt-4">
 
-<h3 className="ticket-title">
-Ticket <span className="ticket-id">#9712</span> (Creating...)
-</h3>
+<h3 className="mb-3">Create New Ticket</h3>
+<button
+type="button"
+className="btn btn-info"
+onClick={()=>setShowHealth(true)}
+>
 
-<div className="ticket-layout">
+System Health
 
-{/* LEFT SIDE */}
+</button>
 
-<div className="ticket-left">
+<div className="ticket-card">
 
-{/* Customer Information */}
+<form onSubmit={handleSubmit}>
 
-<div className="card-box">
+{/* Title */}
 
-<div className="card-header">
-Customer Information <span className="vip">VIP</span>
-</div>
+<div className="mb-3">
 
-<div className="customer-grid">
+<label className="form-label">Title</label>
 
-<div>
-<label>First Name</label>
-<p>Dr. Jane</p>
-</div>
-
-<div>
-<label>Last Name</label>
-<p>Wells</p>
-</div>
-
-<div>
-<label>Phone</label>
-<p>(650) 226-1228</p>
-</div>
-
-<div>
-<label>Email Address</label>
-<p>jwells@stanford.edu</p>
-</div>
-
-<div>
-<label>Location</label>
-<p>Palo Alto</p>
-</div>
+<input
+type="text"
+className="form-control"
+placeholder="Enter ticket title"
+value={title}
+onChange={(e)=>setTitle(e.target.value)}
+/>
 
 </div>
 
+
+{/* Row fields */}
+
+<div className="row">
+
+<div className="col-md-3 mb-3">
+
+<label>SLA Due Date</label>
+
+<input
+type="date"
+className="form-control"
+value={slaDate}
+onChange={(e)=>setSlaDate(e.target.value)}
+/>
+
 </div>
 
-{/* Nature of Request */}
 
-<div className="card-box">
+<div className="col-md-3 mb-3">
 
-<label className="labels">Nature of Request</label>
+<label>Category</label>
 
-<select className="form-input-drop">
+<select
+className="form-control"
+value={category}
+onChange={(e)=>setCategory(e.target.value)}
+>
 
-<option>Applications-CommonEpic eHealthRecord</option>
+<option>Select Category</option>
+<option>Hardware</option>
+<option>Software</option>
+<option>Network</option>
+<option>Other</option>
 
 </select>
 
 </div>
 
-{/* Subject */}
 
-<div className="card-box">
+<div className="col-md-3 mb-3">
 
-<p style={{width:"25px"}}>Subject</p>
+<label>Priority</label>
+
+<select
+className="form-control"
+value={priority}
+onChange={(e)=>setPriority(e.target.value)}
+>
+
+<option>Select Priority</option>
+<option>Low</option>
+<option>Medium</option>
+<option>High</option>
+
+</select>
+
+</div>
+
+
+<div className="col-md-3 mb-3">
+
+<label>Assigned To</label>
+
+<select
+className="form-control"
+value={assignedTo}
+onChange={(e)=>setAssignedTo(e.target.value)}
+>
+
+<option>Select Technician</option>
+<option>Tech 1</option>
+<option>Tech 2</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+{/* Attachment */}
+
+<div className="mb-3">
+
+<label>Attachments</label>
+
+<input type="file" className="form-control"/>
+
+</div>
+
+
+{/* Description */}
+
+<div className="mb-3">
+
+<label>Description</label>
 
 <textarea
-className="form-input"
-placeholder="Enter a description..."
+rows="4"
+className="form-control"
+placeholder="Describe your issue"
+value={description}
+onChange={(e)=>setDescription(e.target.value)}
 ></textarea>
 
 </div>
 
-{/* Details */}
+<div className="mb-3">
 
-<div className="card-box">
+<label>Comments</label>
 
-<h4>Details</h4>
-
-<div className="details-grid">
-
-<div>
-<label>Severity Level</label>
-<p className="link">4 - Service Request</p>
-</div>
-
-<div>
-<label>Status</label>
-<p className="link">New</p>
-</div>
-
-<div>
-<label>Service Group</label>
-<p className="link">Applications-Clinical/Medical</p>
-</div>
-
-<div>
-<label>Assignee</label>
-<p className="link">unassigned</p>
-</div>
-
-<div>
-<label>Root Cause</label>
-<p className="link">none</p>
-</div>
+<textarea
+rows="4"
+className="form-control"
+placeholder="Comments"
+value={comments}
+onChange={(e)=>setComments(e.target.value)}
+></textarea>
 
 </div>
 
-</div>
-
-{/* Notes */}
-
-<div className="notes-grid">
-
-<div className="card-box">
-<label>Public Note</label>
-<textarea className="form-input"/>
-</div>
-
-<div className="card-box">
-<label>Private Note</label>
-<textarea className="form-input"/>
-</div>
-
-</div>
 
 {/* Buttons */}
 
-<div className="ticket-buttons">
+<div className="d-flex gap-2">
 
-<button className="btn-green">Create</button>
-<button className="btn-green">Create & Print</button>
-<button className="btn-link">Cancel</button>
+<button type="button"  onClick={()=> {
+    setAnalysis(null)
+    setShowAIAssist(true)
+}} className="btn btn-secondary">
 
-</div>
+AI Troubleshoot
 
-</div>
+</button>
 
-{/* RIGHT SIDEBAR */}
+<button
+type="button"
+className="btn btn-primary"
+onClick={()=>setShowMeeting(true)}
+>
 
-<div className="ticket-right">
+Schedule Call Addhyan
 
-<h4>Customer</h4>
+</button>
 
-<p className="link">Dr. Jane Wells</p>
-<p>(650) 226-1228</p>
+<button type="submit" className="btn btn-success">
 
-<hr/>
+Submit Ticket
 
-<p><b>Severity level</b></p>
-<p className="link">4 - Service Request</p>
+</button>
 
-<p><b>Status</b></p>
-<p className="link">New</p>
+<button type="button" className="btn btn-outline-danger">
 
-<p><b>Service group</b></p>
-<p className="link">Applications-Clinical/Medical</p>
+Cancel
 
-<p><b>Assigned to</b></p>
-<p className="link">unassigned</p>
-
-<p><b>Root cause</b></p>
-<p>none</p>
+</button>
 
 </div>
 
-</div>
+</form>
 
 </div>
+<HealthModal
+show={showHealth}
+onClose={()=>setShowHealth(false)}
+onAttach={(data)=>{
+
+setDeviceInfo(data)
+// system health ko comment me add karo
+const systemInfoText = `
+System Health Info
+RAM: ${data.ram}
+CPU: ${data.cpu}
+Battery: ${data.battery}
+Network: ${data.network}
+`
+
+setComments((prev)=> prev + "\n" + systemInfoText)
+
+
+setShowHealth(false)
+
+}}
+/>
+
+
+{meeting && (
+
+<div className="alert alert-info mt-3">
+
+<h6>Scheduled Call</h6>
+
+<p><b>Title:</b> {meeting.title}</p>
+
+<p><b>Technician:</b> {meeting.attendee}</p>
+
+<p><b>Date:</b> {meeting.date}</p>
+
+<p><b>Time:</b> {meeting.startTime} - {meeting.endTime}</p>
+
+</div>
+
+)}
+<MeetingModal
+show={showMeeting}
+onClose={()=>setShowMeeting(false)}
+onSchedule={(data)=>setMeeting(data)}
+/>
+
+
+<Aimodal
+show={showaIssist}
+onClose={()=>setShowAIAssist(false)}
+onAnalyze={handleAnalyze}
+analysis={analysis}
+loading={loading}
+solution={solutions}
+/>
+
+</div>
+
+
 
 )
 
