@@ -1,105 +1,132 @@
-.ticket-table{
-
-background:white;
-
-padding:15px;
-
-border-radius:8px;
-
-box-shadow:0px 2px 8px rgba(0,0,0,0.08);
-
+.tableContainer{
+  border:1px solid #ddd;
+  border-radius:10px;
+  overflow:hidden;
+  background:white;
 }
 
-.table-header{
+table{
+  width:100%;
+  border-collapse:collapse;
+}
 
-margin-bottom:10px;
 
+
+th{
+  text-align:left;
+  padding:15px;
+  font-size:13px;
+  color:#6b7280;
+}
+
+td{
+  padding:18px 15px;
+  border-top:1px solid #eee;
+}
+
+
+.ticketId{
+//   color:#2563eb;
+  font-weight:500;
+}
+
+.customerCell{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.customerCell img{
+  width:35px;
+  height:35px;
+  border-radius:50%;
+}
+
+.name{
+  font-weight:500;
+}
+
+.email{
+  font-size:13px;
+  color:#6b7280;
+}
+
+.subject{
+  font-weight:500;
+}
+
+.desc{
+  font-size:13px;
+  color:#6b7280;
+}
+
+.status,
+.priority{
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:500;
+}
+
+.open{
+  background:#fde2e2;
+  color:#b91c1c;
+}
+
+.pending{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.resolved{
+  background:#d1fae5;
+  color:#065f46;
+}
+
+.high{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.medium{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.low{
+  background:#e5e7eb;
+  color:#374151;
+}
+
+.actions a{
+  margin-right:10px;
+  color:#2563eb;
+  text-decoration:none;
+  font-weight:500;
+}
+
+.pagination{
 display:flex;
-
-justify-content:space-between;
-
+justify-content:flex-end;
+gap:8px;
+margin-top:20px;
 }
 
-.search-box{
-
-width:250px;
-
-}
-
-/* Priority badges */
-
-.priority-badge{
-
-padding:4px 10px;
-
-border-radius:4px;
-
-font-size:12px;
-
-font-weight:500;
-
-}
-
-.priority-badge.high{
-
-background:#dc3545;
-
-color:white;
-
-}
-
-.priority-badge.medium{
-
-background:#ffc107;
-
-}
-
-.priority-badge.low{
-
-background:#198754;
-
-color:white;
-
-}
-
-/* Status badges */
-
-.status-badge{
-
-padding:4px 10px;
-
-border-radius:4px;
-
-font-size:12px;
-
-}
-
-.status-badge.open{
-
-background:#0d6efd;
-
-color:white;
-
-}
-
-.status-badge.inprogress{
-
-background:#ffc107;
-
-}
-
-.status-badge.resolved{
-
-background:#198754;
-
-color:white;
-
-}
-
-.button-three-dots{
-background:none;
-border:none;
+.pagination button{
+padding:6px 12px;
+border:1px solid #ddd;
+background:white;
 cursor:pointer;
-font-size:16px;
-color:#6c757d;
+border-radius:5px;
+}
+
+.pagination button.active{
+background:#2563eb;
+color:white;
+border:none;
+}
+
+.pagination button:disabled{
+opacity:0.4;
+cursor:not-allowed;
 }

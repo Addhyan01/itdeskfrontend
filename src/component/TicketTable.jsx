@@ -1,101 +1,645 @@
-import { useState } from "react"
+import React from 'react'
 import "../styles/ticketable.scss"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons"
+import { useState, useEffect } from 'react'
 
-export default function TicketTable() {
+const TicketTable = ({ statusFilter = 'All', priorityFilter = 'All' }) => {
+const tickets = [
+  {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-002",
+    name: "Emma Wilson",
+    email: "emma@company.com",
+    subject: "Billing inquiry",
+    desc: "Questions about recent subscription charges",
+    status: "Pending",
+    priority: "Medium",
+    updated: "4 hours ago",
+    img: "https://i.pravatar.cc/40?img=2",
+  },
+  {
+    id: "#TK-2024-003",
+    name: "Michael Chen",
+    email: "michael@startup.io",
+    subject: "API integration request",
+    desc: "Need webhook support for payments",
+    status: "Resolved",
+    priority: "Low",
+    updated: "1 day ago",
+    img: "https://i.pravatar.cc/40?img=3",
+  },
+  {
+    id: "#TK-2024-004",
+    name: "Sophia Brown",
+    email: "sophia@domain.com",
+    subject: "Password reset problem",
+    desc: "Password reset email not received",
+    status: "Open",
+    priority: "High",
+    updated: "3 hours ago",
+    img: "https://i.pravatar.cc/40?img=4",
+  },
+    {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-005",
+    name: "Daniel Lee",
+    email: "daniel@tech.io",
+    subject: "Dashboard loading slow",
+    desc: "Analytics dashboard takes too long to load",
+    status: "Pending",
+    priority: "Medium",
+    updated: "6 hours ago",
+    img: "https://i.pravatar.cc/40?img=5",
+  },
+    {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-006",
+    name: "Olivia Martin",
+    email: "olivia@mail.com",
+    subject: "Unable to upload files",
+    desc: "Error while uploading documents",
+    status: "Open",
+    priority: "High",
+    updated: "1 hour ago",
+    img: "https://i.pravatar.cc/40?img=6",
+  },
+  {
+    id: "#TK-2024-007",
+    name: "James Anderson",
+    email: "james@site.com",
+    subject: "Payment gateway error",
+    desc: "Transaction failed during checkout",
+    status: "Pending",
+    priority: "High",
+    updated: "5 hours ago",
+    img: "https://i.pravatar.cc/40?img=7",
+  },
+    {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-008",
+    name: "Isabella Garcia",
+    email: "isabella@mail.com",
+    subject: "Profile update issue",
+    desc: "Unable to update profile details",
+    status: "Resolved",
+    priority: "Low",
+    updated: "2 days ago",
+    img: "https://i.pravatar.cc/40?img=8",
+  },
+  {
+    id: "#TK-2024-009",
+    name: "William Taylor",
+    email: "william@company.com",
+    subject: "Notification not working",
+    desc: "Email notifications not received",
+    status: "Open",
+    priority: "Medium",
+    updated: "7 hours ago",
+    img: "https://i.pravatar.cc/40?img=9",
+  },
+  {
+    id: "#TK-2024-010",
+    name: "Ava Thompson",
+    email: "ava@startup.io",
+    subject: "UI glitch in dashboard",
+    desc: "Buttons overlapping in mobile view",
+    status: "Resolved",
+    priority: "Low",
+    updated: "3 days ago",
+    img: "https://i.pravatar.cc/40?img=10",
+  },
+    {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-002",
+    name: "Emma Wilson",
+    email: "emma@company.com",
+    subject: "Billing inquiry",
+    desc: "Questions about recent subscription charges",
+    status: "Pending",
+    priority: "Medium",
+    updated: "4 hours ago",
+    img: "https://i.pravatar.cc/40?img=2",
+  },
+  {
+    id: "#TK-2024-003",
+    name: "Michael Chen",
+    email: "michael@startup.io",
+    subject: "API integration request",
+    desc: "Need webhook support for payments",
+    status: "Resolved",
+    priority: "Low",
+    updated: "1 day ago",
+    img: "https://i.pravatar.cc/40?img=3",
+  },
+  {
+    id: "#TK-2024-004",
+    name: "Sophia Brown",
+    email: "sophia@domain.com",
+    subject: "Password reset problem",
+    desc: "Password reset email not received",
+    status: "Open",
+    priority: "High",
+    updated: "3 hours ago",
+    img: "https://i.pravatar.cc/40?img=4",
+  },
+    {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-005",
+    name: "Daniel Lee",
+    email: "daniel@tech.io",
+    subject: "Dashboard loading slow",
+    desc: "Analytics dashboard takes too long to load",
+    status: "Pending",
+    priority: "Medium",
+    updated: "6 hours ago",
+    img: "https://i.pravatar.cc/40?img=5",
+  },
+  {
+    id: "#TK-2024-006",
+    name: "Olivia Martin",
+    email: "olivia@mail.com",
+    subject: "Unable to upload files",
+    desc: "Error while uploading documents",
+    status: "Open",
+    priority: "High",
+    updated: "1 hour ago",
+    img: "https://i.pravatar.cc/40?img=6",
+  },
+  {
+    id: "#TK-2024-007",
+    name: "James Anderson",
+    email: "james@site.com",
+    subject: "Payment gateway error",
+    desc: "Transaction failed during checkout",
+    status: "Pending",
+    priority: "High",
+    updated: "5 hours ago",
+    img: "https://i.pravatar.cc/40?img=7",
+  },
+    {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-008",
+    name: "Isabella Garcia",
+    email: "isabella@mail.com",
+    subject: "Profile update issue",
+    desc: "Unable to update profile details",
+    status: "Resolved",
+    priority: "Low",
+    updated: "2 days ago",
+    img: "https://i.pravatar.cc/40?img=8",
+  },
+  {
+    id: "#TK-2024-009",
+    name: "William Taylor",
+    email: "william@company.com",
+    subject: "Notification not working",
+    desc: "Email notifications not received",
+    status: "Open",
+    priority: "Medium",
+    updated: "7 hours ago",
+    img: "https://i.pravatar.cc/40?img=9",
+  },
+  {
+    id: "#TK-2024-010",
+    name: "Ava Thompson",
+    email: "ava@startup.io",
+    subject: "UI glitch in dashboard",
+    desc: "Buttons overlapping in mobile view",
+    status: "Resolved",
+    priority: "Low",
+    updated: "3 days ago",
+    img: "https://i.pravatar.cc/40?img=10",
+  },
+  {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-002",
+    name: "Emma Wilson",
+    email: "emma@company.com",
+    subject: "Billing inquiry",
+    desc: "Questions about recent subscription charges",
+    status: "Pending",
+    priority: "Medium",
+    updated: "4 hours ago",
+    img: "https://i.pravatar.cc/40?img=2",
+  },
+    {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-003",
+    name: "Michael Chen",
+    email: "michael@startup.io",
+    subject: "API integration request",
+    desc: "Need webhook support for payments",
+    status: "Resolved",
+    priority: "Low",
+    updated: "1 day ago",
+    img: "https://i.pravatar.cc/40?img=3",
+  },
+  {
+    id: "#TK-2024-004",
+    name: "Sophia Brown",
+    email: "sophia@domain.com",
+    subject: "Password reset problem",
+    desc: "Password reset email not received",
+    status: "Open",
+    priority: "High",
+    updated: "3 hours ago",
+    img: "https://i.pravatar.cc/40?img=4",
+  },
+  {
+    id: "#TK-2024-005",
+    name: "Daniel Lee",
+    email: "daniel@tech.io",
+    subject: "Dashboard loading slow",
+    desc: "Analytics dashboard takes too long to load",
+    status: "Pending",
+    priority: "Medium",
+    updated: "6 hours ago",
+    img: "https://i.pravatar.cc/40?img=5",
+  },
+  {
+    id: "#TK-2024-006",
+    name: "Olivia Martin",
+    email: "olivia@mail.com",
+    subject: "Unable to upload files",
+    desc: "Error while uploading documents",
+    status: "Open",
+    priority: "High",
+    updated: "1 hour ago",
+    img: "https://i.pravatar.cc/40?img=6",
+  },
+  {
+    id: "#TK-2024-007",
+    name: "James Anderson",
+    email: "james@site.com",
+    subject: "Payment gateway error",
+    desc: "Transaction failed during checkout",
+    status: "Pending",
+    priority: "High",
+    updated: "5 hours ago",
+    img: "https://i.pravatar.cc/40?img=7",
+  },
+    {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-008",
+    name: "Isabella Garcia",
+    email: "isabella@mail.com",
+    subject: "Profile update issue",
+    desc: "Unable to update profile details",
+    status: "Resolved",
+    priority: "Low",
+    updated: "2 days ago",
+    img: "https://i.pravatar.cc/40?img=8",
+  },
+  {
+    id: "#TK-2024-009",
+    name: "William Taylor",
+    email: "william@company.com",
+    subject: "Notification not working",
+    desc: "Email notifications not received",
+    status: "Open",
+    priority: "Medium",
+    updated: "7 hours ago",
+    img: "https://i.pravatar.cc/40?img=9",
+  },
+  {
+    id: "#TK-2024-010",
+    name: "Ava Thompson",
+    email: "ava@startup.io",
+    subject: "UI glitch in dashboard",
+    desc: "Buttons overlapping in mobile view",
+    status: "Resolved",
+    priority: "Low",
+    updated: "3 days ago",
+    img: "https://i.pravatar.cc/40?img=10",
+  },
+  {
+    id: "#TK-2024-001",
+    name: "John Smith",
+    email: "john@example.com",
+    subject: "Login issue on mobile app",
+    desc: "Unable to authenticate on iOS device",
+    status: "Open",
+    priority: "High",
+    updated: "2 hours ago",
+    img: "https://i.pravatar.cc/40?img=1",
+  },
+  {
+    id: "#TK-2024-002",
+    name: "Emma Wilson",
+    email: "emma@company.com",
+    subject: "Billing inquiry",
+    desc: "Questions about recent subscription charges",
+    status: "Pending",
+    priority: "Medium",
+    updated: "4 hours ago",
+    img: "https://i.pravatar.cc/40?img=2",
+  },
+  {
+    id: "#TK-2024-003",
+    name: "Michael Chen",
+    email: "michael@startup.io",
+    subject: "API integration request",
+    desc: "Need webhook support for payments",
+    status: "Resolved",
+    priority: "Low",
+    updated: "1 day ago",
+    img: "https://i.pravatar.cc/40?img=3",
+  },
+  {
+    id: "#TK-2024-004",
+    name: "Sophia Brown",
+    email: "sophia@domain.com",
+    subject: "Password reset problem",
+    desc: "Password reset email not received",
+    status: "Open",
+    priority: "High",
+    updated: "3 hours ago",
+    img: "https://i.pravatar.cc/40?img=4",
+  },
+  {
+    id: "#TK-2024-005",
+    name: "Daniel Lee",
+    email: "daniel@tech.io",
+    subject: "Dashboard loading slow",
+    desc: "Analytics dashboard takes too long to load",
+    status: "Pending",
+    priority: "Medium",
+    updated: "6 hours ago",
+    img: "https://i.pravatar.cc/40?img=5",
+  },
+  {
+    id: "#TK-2024-006",
+    name: "Olivia Martin",
+    email: "olivia@mail.com",
+    subject: "Unable to upload files",
+    desc: "Error while uploading documents",
+    status: "Open",
+    priority: "High",
+    updated: "1 hour ago",
+    img: "https://i.pravatar.cc/40?img=6",
+  },
+  {
+    id: "#TK-2024-007",
+    name: "James Anderson",
+    email: "james@site.com",
+    subject: "Payment gateway error",
+    desc: "Transaction failed during checkout",
+    status: "Pending",
+    priority: "High",
+    updated: "5 hours ago",
+    img: "https://i.pravatar.cc/40?img=7",
+  },
+  {
+    id: "#TK-2024-008",
+    name: "Isabella Garcia",
+    email: "isabella@mail.com",
+    subject: "Profile update issue",
+    desc: "Unable to update profile details",
+    status: "Resolved",
+    priority: "Low",
+    updated: "2 days ago",
+    img: "https://i.pravatar.cc/40?img=8",
+  },
+  {
+    id: "#TK-2024-009",
+    name: "William Taylor",
+    email: "william@company.com",
+    subject: "Notification not working",
+    desc: "Email notifications not received",
+    status: "Open",
+    priority: "Medium",
+    updated: "7 hours ago",
+    img: "https://i.pravatar.cc/40?img=9",
+  },
+  {
+    id: "#TK-2024-010",
+    name: "Ava Thompson",
+    email: "ava@startup.io",
+    subject: "UI glitch in dashboard",
+    desc: "Buttons overlapping in mobile view",
+    status: "Resolved",
+    priority: "Low",
+    updated: "3 days ago",
+    img: "https://i.pravatar.cc/40?img=10",
+  },
+];
 
-    const [search, setSearch] = useState("")
+const [currentPage, setCurrentPage] = useState(1);
 
-    const tickets = [
+  const ticketsPerPage = 10;
 
-        {
-            title: "WiFi not working",
-            priority: "High",
-            status: "Open",
-             created: "2024-06-01"
-        },
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter, priorityFilter]);
 
-        {
-            title: "Laptop slow",
-            priority: "Medium",
-            status: "In Progress",  
-             created: "2024-06-01"
-        },
+  // Apply filters to tickets
+  const filteredTickets = tickets.filter((ticket) => {
+    const statusMatch = statusFilter === 'All' || ticket.status === statusFilter;
+    const priorityMatch = priorityFilter === 'All' || ticket.priority === priorityFilter;
+    return statusMatch && priorityMatch;
+  });
 
-        {
-            title: "Software crash",
-            priority: "Low",
-            status: "Resolved",
-            created: "2024-06-01"
-        }
+  const lastIndex = currentPage * ticketsPerPage;
+  const firstIndex = lastIndex - ticketsPerPage;
 
-    ]
+  const currentTickets = filteredTickets.slice(firstIndex, lastIndex);
 
-    const filteredTickets = tickets.filter(ticket =>
-        ticket.title.toLowerCase().includes(search.toLowerCase())
-    )
+  const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage);    
+  return (
+    <div className="tableContainer">
+      <table>
+        <thead>
+          <tr>
+            <th>TICKET ID</th>
+            <th>CUSTOMER</th>
+            <th>SUBJECT</th>
+            <th>STATUS</th>
+            <th>PRIORITY</th>
+            <th>LAST UPDATED</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
 
-    return (
+        <tbody>
+          {currentTickets.map((ticket, index) => (
+            <tr key={index}>
+              <td className="ticketId">{ticket.id}</td>
 
-        <div className="ticket-table">
+              <td className="customerCell">
+                <img src={ticket.img} alt="" />
+                <div>
+                  <div className="name">{ticket.name}</div>
+                  <div className="email">{ticket.email}</div>
+                </div>
+              </td>
 
+              <td>
+                <div className="subject">{ticket.subject}</div>
+                <div className="desc">{ticket.desc}</div>
+              </td>
 
-            <table className="table table-hover">
+              <td>
+                <span className={`status ${ticket.status.toLowerCase()}`}>
+                  {ticket.status}
+                </span>
+              </td>
 
-                <thead>
+              <td>
+                <span className={`priority ${ticket.priority.toLowerCase()}`}>
+                  {ticket.priority}
+                </span>
+              </td>
 
-                    <tr>
-                        <th> Number</th>
+              <td className="updated">{ticket.updated}</td>
 
-                        <th>Title</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Created date</th>
-                        <th>Action</th>
-                        
+              <td className="actions">
+                <a href="/">View</a>
+                <a href="/">Edit</a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="pagination">
 
-                    </tr>
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          Previous
+        </button>
 
-                </thead>
+        {[...Array(totalPages)].map((_, i) => (
+          <button
+            key={i}
+            className={currentPage === i + 1 ? "active" : ""}
+            onClick={() => setCurrentPage(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
 
-                <tbody>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          Next
+        </button>
 
-                    {filteredTickets.map((ticket, i) => (
-
-                        <tr key={i}>
-                            <td>{i + 1}</td>
-                            
-
-                            <td>{ticket.title}</td>
-
-                            <td>
-                                <span className={`priority-badge ${ticket.priority.toLowerCase()}`}>
-                                    {ticket.priority}
-                                </span>
-                            </td>
-
-                            <td>
-                                <span className={`status-badge ${ticket.status.replace(" ", "").toLowerCase()}`}>
-                                    {ticket.status}
-                                </span>
-                            </td>   
-                            <td>{ticket.created}</td>
-                            
-                            <td>
-                                <button className="button-three-dots"> <FontAwesomeIcon icon={faEllipsis} /></button>
-                            </td>
-
-                        </tr>
-
-                    ))}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    )
-
+      </div>
+    </div>
+  )
 }
+
+export default TicketTable

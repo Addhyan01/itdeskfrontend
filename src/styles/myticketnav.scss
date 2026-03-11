@@ -1,0 +1,82 @@
+.my-ticket-nav{
+    padding: 20px 20px; 
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+}
+
+.nav-item{
+display:flex;
+justify-content: space-between;
+background-color: white;
+align-items:center;
+gap:10px;
+padding:10px 15px;
+border-radius:8px;
+color:#333;
+cursor:pointer;
+transition:background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+}
+.cardticket{
+
+display:grid;   
+grid-template-columns: 1fr 1fr 1fr 1fr;
+gap:10px;
+border-radius:8px;
+color:#333;
+cursor:pointer;
+}
+.cordcontext{
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon-yellow{
+  background:#fef3c7;
+  color:#d97706;
+}
+.icon-green{
+  background:#dcfce7;
+  color:#16a34a;
+}
+.icon-purple{
+  background:#f3e8ff;
+  color:#7c3aed;
+} .icon-blue{
+  background:#dbeafe;
+  color:#2563eb;
+}
+.icon-red{
+  background:#fee2e2;
+  color:#dc2626;
+}
+
+.nav2{
+                --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+
+// background-color: #16a34a;
+display:flex;
+justify-content: space-between;
+background-color: white;
+align-items:center;
+gap:10px;
+padding:10px 15px;
+color:#333;
+cursor:pointer;
+border: 0.5px solid #e5e7eb;
+
+}
+.nav2drop{
+    display: flex;
+}

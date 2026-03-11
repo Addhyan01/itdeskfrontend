@@ -1,10 +1,8 @@
 import { BrowserRouter,Routes,Route } from "react-router-dom"
-import Navbar from "./component/Navbar"
-import LeftNavbar from "./component/LeftNavbar"
 import DashboardLayout from "./layout/dashboardLayout"
 import Dashboard from "./pages/Dashboard"
 import MyTicket from "./pages/MyTicket"
-import CreateTicket from "./pages/CreateTickets"
+import CreateTicket from "./pages/CreateTicket"
 import Login from "./Login/Login"
 
 // import Dashboard from "./pages/Dashboard";

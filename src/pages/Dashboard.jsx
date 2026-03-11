@@ -2,14 +2,11 @@ import { faBusinessTime, faCircleCheck, faDownload, faStopwatch,  } from "@forta
 // import { faTicket} from '@fortawesome/free-regular-svg-icons'
 import { faTicket,faClock } from '@fortawesome/free-solid-svg-icons'
 
-import Navbar from "../component/Navbar"
 import "../styles/dashboard.scss"
-import MyTickets from "./MyTicket"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {  faClockFour } from "@fortawesome/free-regular-svg-icons"
 import addhyan from "../asset/addhyan.jpeg"
 import ChartComponent from "../component/ChartComponent"
-import ChartDataComponent from "../component/ChartDataComponent"
+import TicketChart from "../component/TicketChart.jsx"
 
 export default function Dashboard() {
 
@@ -184,41 +181,6 @@ return (
 
 </div>
 
-{/* <div className="stat green">
-<h2>1</h2>
-<p>Tasks Due This week</p>
-</div> */}
-
-{/* <div className="stat gradient">
-<div className="multi-stat">
-
-<div>
-<h2>463</h2>
-<p>Open Requests</p>
-</div>
-
-<div>
-<h2>15</h2>
-<p>On Hold</p>
-</div>
-
-<div>
-<h2>59</h2>
-<p>Closed</p>
-</div>
-
-</div>
-</div> */}
-
-{/* <div className="stat blue">
-<h2>2</h2>
-<p>Req. Due Today</p>
-</div> */}
-{/* 
-<div className="stat sky">
-<h2>94</h2>
-<p>Technician Unassigned</p>
-</div> */}
 
 </div>
 
@@ -229,7 +191,7 @@ return (
 
 <div className="main-grid-new">
         <div className="main-left">
-            <ChartDataComponent  />
+            <TicketChart />
 
         </div>
 
@@ -242,7 +204,7 @@ return (
 
                     <div class="tech-left">
                         <div class="avatar">
-                            <img src={tech.avatar} />
+                            <img src={tech.avatar} alt="userimage" />
                             <span class={`status-dot ${tech.status === "Available" ? "online" : "busy"}`}></span>
                         </div>
 
@@ -269,9 +231,9 @@ return (
 
 <div className="main-grid-two">
     <div className="main-left-two">
-        <h4>Recent Tickets</h4>
-        <ChartComponent />
-        </div>
+
+    </div>
+   
     <div className="main-left-two">
         <h4>Recent <span className="    ">Critical</span>  Task</h4>
             <table className="recent-tasks-table">
@@ -321,9 +283,13 @@ return (
 
             <div><button className="create-button">View All</button></div>
     </div>
-    <div className="main-left-two">
 
-    </div>
+
+     <div className="main-left-two">
+        <h4>Recent Tickets</h4>
+        <ChartComponent />
+        </div>
+    
 
 </div>
 

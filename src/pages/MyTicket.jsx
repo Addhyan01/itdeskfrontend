@@ -1,3 +1,4 @@
+import MyTicketNav from "../component/MyTicketNav"
 import Navbar from "../component/Navbar"
 import TicketTable from "../component/TicketTable"
 
@@ -13,8 +14,7 @@ return(
 
 
 
-<TicketTable/>
-
+<MyTicketNav />
 
 </div>
 
