@@ -1,54 +1,132 @@
-import React, { useState } from 'react';
-import './Login.css';
+import React, { useState } from "react";
+import "./Login.css";
+import { Link, useNavigate } from "react-router-dom";
+import { signUp } from "../services/api"
+import Swal from "sweetalert2";
 
 export default function Signup() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "user"
+    });
+
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
+    // handle input change
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    // validation
     const validate = () => {
-        if (!email) {
-            setError('Please enter your email.');
+
+        if (!formData.name) {
+            setError("Please enter your name");
             return false;
         }
+
+        if (!formData.email) {
+            setError("Please enter your email");
+            return false;
+        }
+
         const re = /\S+@\S+\.\S+/;
-        if (!re.test(email)) {
-            setError('Please enter a valid email address.');
+
+        if (!re.test(formData.email)) {
+            setError("Please enter valid email");
             return false;
         }
-        if (!password) {
-            setError('Please enter your password.');
+
+        if (!formData.password) {
+            setError("Please enter password");
             return false;
         }
-        setError('');
+
+        if (formData.password !== formData.confirmPassword) {
+            setError("Passwords do not match");
+            return false;
+        }
+
+        setError("");
         return true;
     };
 
-    const handleSubmit = (e) => {
+    // submit
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (!validate()) return;
+
         setLoading(true);
-        // Mock submit: replace with real auth call
-        setTimeout(() => {
+
+        try {
+
+            const response = await signUp(formData);
+
+            // console.log(response);
             setLoading(false);
-            alert(`Logged in as ${email} (mock)`);
-        }, 800);
+            setFormData({
+                name: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+                role: "user"
+
+            });
+
+
+            Swal.fire({
+                title: "Success",
+                text: "User created successfully",
+                icon: "success"
+            }).then(() => {
+                navigate("/login");
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
     };
 
     return (
         <div className="login-page">
             <div className="login-card">
-                <h2>Sign in</h2>
+
+                <h2>Sign up</h2>
+
                 <form onSubmit={handleSubmit} className="login-form">
+
+                    <label>
+                        Name
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            placeholder="Full Name"
+                        />
+                    </label>
+                    
+
                     <label>
                         Email
                         <input
                             type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="you@example.com"
-                            autoComplete="username"
                         />
                     </label>
 
@@ -56,24 +134,50 @@ export default function Signup() {
                         Password
                         <input
                             type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter password"
-                            autoComplete="current-password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="password"
                         />
+                    </label>
+
+                    <label>
+                        Confirm Password
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            placeholder="Confirm password"
+                        />
+                    </label>
+
+                    <label>
+                        Select Role
+                        <select
+                            name="role"
+                            value={formData.role}
+                            onChange={handleChange}
+                        >
+                            <option value="user">User</option>
+                            <option value="technician">Technician</option>
+                            <option value="admin">Admin</option>
+                        </select>
                     </label>
 
                     {error && <div className="login-error">{error}</div>}
 
                     <button type="submit" className="login-btn" disabled={loading}>
-                        {loading ? 'Signing in...' : 'Sign in'}
+                        {loading ? "Signing up..." : "Sign up"}
                     </button>
+
                 </form>
 
                 <div className="login-footer">
-                    <span>Don't have an account?</span>
-                    <a href="#"> Sign up</a>
+                    <span>Already have an account?</span>
+                    <Link to="/login"> Login</Link>
                 </div>
+
             </div>
         </div>
     );

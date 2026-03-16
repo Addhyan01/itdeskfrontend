@@ -7,8 +7,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import addhyan from "../asset/addhyan.jpeg"
 import ChartComponent from "../component/ChartComponent"
 import TicketChart from "../component/TicketChart.jsx"
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Dashboard() {
+    const { user } = useContext(AuthContext);
 
 
     const technicians = [
@@ -54,7 +57,7 @@ return (
 
     <div className="dashboard-header">  
         <div>
-            <h1>Good Morning</h1>
+            <h1>Good Morning, {user?.name}</h1>
 <p>Here's what's happening in the support center today.</p>
         </div>
         <div className="dashboard-actions">
@@ -89,9 +92,9 @@ return (
     </div>
     </div>
     
-    <div class="card-stats">
-    <span class="badge-success">↑ 12%</span>
-    <span class="card-subtext">vs last month</span>
+    <div className="card-stats">
+    <span className="badge-success">↑ 12%</span>
+    <span className="card-subtext">vs last month</span>
  </div>
 
 </div>
@@ -111,9 +114,9 @@ return (
     </div>
     </div>
     
-    <div class="card-stats">
-    <span class="badge-danger">↓ 12%</span>
-    <span class="card-subtext">vs last month</span>
+    <div className="card-stats">
+    <span className="badge-danger">↓ 12%</span>
+    <span className="card-subtext">vs last month</span>
  </div>
 
 </div>
@@ -132,9 +135,9 @@ return (
     </div>
     </div>
     
-    <div class="card-stats">
-    <span class="badge-success">↑ 18%</span>
-    <span class="card-subtext">vs last month</span>
+    <div className="card-stats">
+    <span className="badge-success">↑ 18%</span>
+    <span className="card-subtext">vs last month</span>
  </div>
 
 </div>
@@ -153,9 +156,9 @@ return (
     </div>
     </div>
     
-    <div class="card-stats">
-    <span class="badge-success">↑ 12%</span>
-    <span class="card-subtext">vs last month</span>
+    <div className="card-stats">
+    <span className="badge-success">↑ 12%</span>
+    <span className="card-subtext">vs last month</span>
  </div>
 
 </div>  
@@ -174,9 +177,9 @@ return (
     </div>
     </div>
     
-    <div class="card-stats">
-    <span class="badge-success">↑ 12%</span>
-    <span class="card-subtext">vs last month</span>
+    <div className="card-stats">
+    <span className="badge-success">↑ 12%</span>
+    <span className="card-subtext">vs last month</span>
  </div>
 
 </div>
@@ -200,23 +203,23 @@ return (
             <h4>Technician Status</h4>
             {/* Technician status section */ }
             {technicians.map((tech, index) => (
-                <div class="tech-item" key={index}>
+                <div className="tech-item" key={index}>
 
-                    <div class="tech-left">
-                        <div class="avatar">
+                    <div className="tech-left">
+                        <div className="avatar">
                             <img src={tech.avatar} alt="userimage" />
-                            <span class={`status-dot ${tech.status === "Available" ? "online" : "busy"}`}></span>
+                            <span className={`status-dot ${tech.status === "Available" ? "online" : "busy"}`}></span>
                         </div>
 
-                        <div class="tech-info">
+                        <div className="tech-info">
                             <h4 className="card-title card-font">{tech.name}</h4>
                             <p className="card-title">{tech.role}</p>
                         </div>
                     </div>
 
-                    <div class="tech-right">
-                        <span class={`badge ${tech.status === "Available" ? "available" : "busy"}`}>{tech.status}</span>
-                        <p class="ticket-count">{tech.activeTickets} Active Tickets</p>
+                    <div className="tech-right">
+                        <span className={`badge ${tech.status === "Available" ? "available" : "busy"}`}>{tech.status}</span>
+                        <p className="ticket-count">{tech.activeTickets} Active Tickets</p>
                     </div>
                 </div>
             ))}   

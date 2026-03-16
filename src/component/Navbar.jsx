@@ -1,22 +1,47 @@
-import { Link } from "react-router-dom"
+import {   useNavigate, useLocation, Link } from "react-router-dom"
 import "../styles/navbar.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBell, faEnvelope } from "@fortawesome/free-regular-svg-icons"
-import Addhyan from "../asset/addhyan.jpeg"
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons"
 import { useState } from "react"
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 
 
 
 export default function Navbar() {
+    const { user, setUser } = useContext(AuthContext);
+
+      const navigate = useNavigate();
+      const location = useLocation();
+      const routeTitleMap = {
+        "/dashboard": "Dashboard",
+        "/dashboard/tickets": "My Ticket",
+        "/dashboard/create-ticket": "Create Ticket",
+      };
+      const title = routeTitleMap[location.pathname] || (() => {
+        const last = location.pathname.split("/").filter(Boolean).pop();
+        if (!last) return "Dashboard";
+        return last
+          .replace(/-/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+      })();
+
 
     const [ open, setOpen ] = useState(false)
+    const handleLogout = () => {
+  localStorage.removeItem("token");
+    setUser(null);
+
+
+   navigate("/login");
+};
 
     return (
 
         <nav className="navbar">
-            <p>Dashboard</p>
+            <p>{title}</p>
             <div className="nav-right">
             <input  type="text" placeholder="Search ticket, IDs, or users..."  />
             
@@ -24,29 +49,30 @@ export default function Navbar() {
             <div className="icon">
                 <div className="notification">
                     <i><FontAwesomeIcon icon={faEnvelope} /></i>
-                  <span class="dot"></span>
+                  <span className="dot"></span>
                 </div>
                 
                 <div className="notification">
                     <span><FontAwesomeIcon icon={faBell} /></span>
-                     <span class="dot"></span>
+                     <span className="dot"></span>
 
 
                 </div>
 
                 
             </div>
-            <div class="line"></div>
+            <div className="line"></div>
 
                     <div className="profile-wrapper">
 
             
             <button className="profile-button" onClick={() => setOpen(!open)}>
-                <div className="username"><p>Addhyan</p>
+                <div className="username"><p>{user?.name}
+</p>
             
             </div>
             <div className="usericon">
-                 <img className="profile" src={Addhyan} alt="" />
+                 <img className="profile" src={user?.profilePicture || "/default-avatar.png"} alt="" />
                 <p><FontAwesomeIcon icon={faAngleDown} /></p>
 
 
@@ -58,8 +84,11 @@ export default function Navbar() {
             </button>
             {open && (
             <div className="dropdown">
-              <p>Profile</p>
-              <p>Logout</p>
+              <p>
+                <Link to="/dashboard/profile" >Profile 
+                </Link>
+              </p>
+              <p onClick={handleLogout}>Logout</p>
             </div>
           )}
           </div>

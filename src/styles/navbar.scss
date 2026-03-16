@@ -86,9 +86,14 @@
   
 }
 
-.dropdown a,
+
 .dropdown p{
   padding: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+.dropdown a{
   cursor: pointer;
   text-decoration: none;
   color: black;
