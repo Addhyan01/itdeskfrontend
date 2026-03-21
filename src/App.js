@@ -15,7 +15,6 @@ import "react-toastify/dist/ReactToastify.css"
 import { useContext } from "react"
 import { AuthContext } from "./context/AuthContext"
 
-// Role-based redirect after login
 function RoleRedirect() {
   const { user } = useContext(AuthContext)
   if (!user) return null
@@ -39,9 +38,7 @@ function App() {
             <Route path="tickets" element={<MyTicket />} />
             <Route path="create-ticket" element={<CreateTicket />} />
             <Route path="profile" element={<Profile />} />
-            {/* Admin only */}
             <Route path="admin" element={<AdminDashboard />} />
-            {/* Technician only */}
             <Route path="technician" element={<TechnicianPanel />} />
           </Route>
         </Routes>

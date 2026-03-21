@@ -1,70 +1,157 @@
 import React, { useEffect, useState } from "react"
-import { getMyTickets } from "../services/api"
+import { getMyTickets, addComment, closeTicket } from "../services/api"
 import { toast } from "react-toastify"
+import SLABadge from "../component/SLABadge"
 
-const statusColor = { Open: "#3b82f6", Assigned: "#f59e0b", "In Progress": "#8b5cf6", Resolved: "#10b981", Closed: "#6b7280" }
+const statusColor = { Pending: "#6b7280", "In Process": "#f59e0b", Working: "#8b5cf6", Resolved: "#10b981", Closed: "#374151" }
 const priorityColor = { Low: "#10b981", Medium: "#f59e0b", High: "#ef4444", Critical: "#7c3aed" }
 
 export default function MyTickets() {
   const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState("All")
+  const [filters, setFilters] = useState({ status: "", priority: "", search: "" })
+  const [expanded, setExpanded] = useState(null)
+  const [comment, setComment] = useState({})
+  const [submitting, setSubmitting] = useState(false)
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const data = await getMyTickets()
-        setTickets(Array.isArray(data) ? data : [])
-      } catch { toast.error("Failed to load tickets") }
-      setLoading(false)
-    }
-    fetch()
-  }, [])
+  const loadTickets = async () => {
+    setLoading(true)
+    try {
+      const active = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v))
+      const data = await getMyTickets(active)
+      setTickets(Array.isArray(data) ? data : [])
+    } catch { toast.error("Failed to load tickets") }
+    setLoading(false)
+  }
 
-  const filtered = filter === "All" ? tickets : tickets.filter(t => t.status === filter)
+  useEffect(() => { loadTickets() }, [filters])
+
+  const handleClose = async (id) => {
+    if (!window.confirm("Are you sure you want to close this ticket?")) return
+    const res = await closeTicket(id)
+    if (res.ticket) { toast.success("Ticket closed!"); loadTickets() }
+    else toast.error(res.message)
+  }
+
+  const handleComment = async (ticketId) => {
+    if (!comment[ticketId]?.trim()) return
+    setSubmitting(true)
+    const res = await addComment(ticketId, comment[ticketId])
+    if (res.comments) {
+      toast.success("Comment added!")
+      setComment({ ...comment, [ticketId]: "" })
+      loadTickets()
+    } else toast.error(res.message)
+    setSubmitting(false)
+  }
 
   return (
-    <div style={{ padding: "24px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-        <h2 style={{ margin: 0 }}>My Tickets</h2>
-        <select value={filter} onChange={e => setFilter(e.target.value)} style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #ddd" }}>
-          <option value="All">All</option>
-          <option value="Open">Open</option>
-          <option value="Assigned">Assigned</option>
-          <option value="In Progress">In Progress</option>
+    <div style={{ padding: 24 }}>
+      <h2 style={{ marginBottom: 20 }}>My Tickets</h2>
+
+      {/* Filters */}
+      <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
+        <input
+          type="text" placeholder="🔍 Search tickets..."
+          value={filters.search} onChange={e => setFilters({ ...filters, search: e.target.value })}
+          style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid #ddd", flex: 1, minWidth: 200 }}
+        />
+        <select value={filters.status} onChange={e => setFilters({ ...filters, status: e.target.value })}
+          style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid #ddd" }}>
+          <option value="">All Status</option>
+          <option value="Pending">Pending</option>
+          <option value="In Process">In Process</option>
+          <option value="Working">Working</option>
           <option value="Resolved">Resolved</option>
           <option value="Closed">Closed</option>
         </select>
+        <select value={filters.priority} onChange={e => setFilters({ ...filters, priority: e.target.value })}
+          style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid #ddd" }}>
+          <option value="">All Priority</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+          <option value="Critical">Critical</option>
+        </select>
       </div>
 
-      {loading ? <p>Loading tickets...</p> : filtered.length === 0 ? (
-        <div style={{ textAlign: "center", padding: 60, color: "#999" }}>
+      {loading ? <p>Loading...</p> : tickets.length === 0 ? (
+        <div style={{ textAlign: "center", padding: 60, color: "#999", background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb" }}>
+          <p style={{ fontSize: 40 }}>🎫</p>
           <h3>No tickets found</h3>
           <p>Create a new ticket to get started</p>
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {filtered.map(ticket => (
-            <div key={ticket._id} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 10, padding: 20, boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                <div>
-                  <span style={{ fontSize: 12, color: "#999", fontFamily: "monospace" }}>{ticket.ticketId}</span>
-                  <h4 style={{ margin: "4px 0 8px", fontSize: 16 }}>{ticket.title}</h4>
-                  <p style={{ margin: 0, color: "#666", fontSize: 14 }}>{ticket.category}</p>
-                </div>
-                <div style={{ display: "flex", gap: 8, flexDirection: "column", alignItems: "flex-end" }}>
-                  <span style={{ padding: "4px 10px", borderRadius: 20, fontSize: 12, background: statusColor[ticket.status] + "22", color: statusColor[ticket.status], fontWeight: 600 }}>
-                    {ticket.status}
-                  </span>
-                  <span style={{ padding: "4px 10px", borderRadius: 20, fontSize: 12, background: priorityColor[ticket.priority] + "22", color: priorityColor[ticket.priority], fontWeight: 600 }}>
-                    {ticket.priority}
-                  </span>
+          {tickets.map(ticket => (
+            <div key={ticket._id} style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
+              {/* Ticket Header */}
+              <div style={{ padding: "16px 20px", cursor: "pointer" }} onClick={() => setExpanded(expanded === ticket._id ? null : ticket._id)}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                      <span style={{ fontSize: 12, color: "#999", fontFamily: "monospace", background: "#f5f5f5", padding: "2px 8px", borderRadius: 4 }}>{ticket.ticketId}</span>
+                      <span style={{ padding: "3px 10px", borderRadius: 20, fontSize: 12, fontWeight: 600, background: statusColor[ticket.status] + "22", color: statusColor[ticket.status] }}>{ticket.status}</span>
+                      <span style={{ padding: "3px 10px", borderRadius: 20, fontSize: 12, fontWeight: 600, background: priorityColor[ticket.priority] + "22", color: priorityColor[ticket.priority] }}>{ticket.priority}</span>
+                    </div>
+                    <h4 style={{ margin: "0 0 6px", fontSize: 15 }}>{ticket.title}</h4>
+                    <SLABadge slaStatus={ticket.slaStatus} slaHours={ticket.slaHours} createdAt={ticket.createdAt} dueDate={ticket.dueDate} />
+                  </div>
+                  <div style={{ textAlign: "right", fontSize: 12, color: "#999" }}>
+                    <p style={{ margin: 0 }}>{new Date(ticket.createdAt).toLocaleDateString("en-IN")}</p>
+                    {ticket.assignedTo && <p style={{ margin: "4px 0 0" }}>🔧 {ticket.assignedTo.name}</p>}
+                    <p style={{ margin: "4px 0 0", color: expanded === ticket._id ? "#3b82f6" : "#999" }}>{expanded === ticket._id ? "▲ Less" : "▼ More"}</p>
+                  </div>
                 </div>
               </div>
-              <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid #f0f0f0", display: "flex", justifyContent: "space-between", fontSize: 12, color: "#999" }}>
-                <span>Created: {new Date(ticket.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
-                {ticket.assignedTo && <span>Assigned to: <strong>{ticket.assignedTo.name}</strong></span>}
-              </div>
+
+              {/* Expanded Details */}
+              {expanded === ticket._id && (
+                <div style={{ borderTop: "1px solid #f0f0f0", padding: "16px 20px", background: "#fafafa" }}>
+                  <p style={{ color: "#555", fontSize: 14, marginBottom: 16 }} dangerouslySetInnerHTML={{ __html: ticket.description }} />
+
+                  {/* Comments */}
+                  {ticket.comments?.length > 0 && (
+                    <div style={{ marginBottom: 16 }}>
+                      <p style={{ fontWeight: 600, fontSize: 13, marginBottom: 8 }}>💬 Comments</p>
+                      {ticket.comments.map((c, i) => (
+                        <div key={i} style={{ background: "#fff", borderRadius: 8, padding: "10px 14px", marginBottom: 8, border: "1px solid #e5e7eb" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                            <span style={{ fontWeight: 600, fontSize: 13 }}>{c.authorName || "User"}</span>
+                            <span style={{ fontSize: 11, color: "#999" }}>{new Date(c.createdAt).toLocaleString("en-IN")}</span>
+                          </div>
+                          <p style={{ margin: 0, fontSize: 13, color: "#555" }}>{c.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Add Comment */}
+                  {ticket.status !== "Closed" && (
+                    <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                      <input
+                        type="text" placeholder="Add a comment..."
+                        value={comment[ticket._id] || ""}
+                        onChange={e => setComment({ ...comment, [ticket._id]: e.target.value })}
+                        style={{ flex: 1, padding: "8px 12px", borderRadius: 8, border: "1px solid #ddd", fontSize: 13 }}
+                        onKeyDown={e => e.key === "Enter" && handleComment(ticket._id)}
+                      />
+                      <button onClick={() => handleComment(ticket._id)} disabled={submitting}
+                        style={{ padding: "8px 16px", background: "#3b82f6", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontSize: 13 }}>
+                        Send
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Close Button */}
+                  {(ticket.status === "Resolved" || ticket.status === "Pending") && (
+                    <button onClick={() => handleClose(ticket._id)}
+                      style={{ padding: "8px 20px", background: "#ef4444", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+                      Close Ticket
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>
