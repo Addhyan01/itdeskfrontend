@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 
 const Protechted = ({ children }) => {
-  const { user, loading } = useContext(AuthContext)
+  const {  loading } = useContext(AuthContext)
   const token = localStorage.getItem("token")
 
   // No token → login

@@ -2,7 +2,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom"
 import "../styles/navbar.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBell } from "@fortawesome/free-regular-svg-icons"
-import { faAngleDown, faCheck, faCheckDouble } from "@fortawesome/free-solid-svg-icons"
+import { faAngleDown,  faCheckDouble } from "@fortawesome/free-solid-svg-icons"
 import { useState, useEffect, useContext, useRef } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from "../services/api"
@@ -44,7 +44,7 @@ export default function Navbar() {
   useEffect(() => {
     if (user) {
       fetchNotifs()
-      const interval = setInterval(fetchNotifs, 30000) // poll every 30s
+      const interval = setInterval(fetchNotifs, 120000) // poll every 2 minutes
       return () => clearInterval(interval)
     }
   }, [user])

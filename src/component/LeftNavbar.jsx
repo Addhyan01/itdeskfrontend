@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faTableColumns, faTicketAlt, faPlus,
   faUsers, faUser, faCog, faCircleQuestion,
-  faClipboardList, faChartPie, faRotateLeft,
+  faClipboardList, faChartPie, 
   faUserPlus, faList
 } from "@fortawesome/free-solid-svg-icons"
 import { NavLink, useNavigate } from "react-router-dom"
