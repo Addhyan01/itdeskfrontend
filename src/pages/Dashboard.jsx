@@ -1,444 +1,245 @@
-import { faBusinessTime, faCircleCheck, faDownload, faStopwatch,  } from "@fortawesome/free-solid-svg-icons"
-// import { faTicket} from '@fortawesome/free-regular-svg-icons'
-import { faTicket,faClock } from '@fortawesome/free-solid-svg-icons'
-
-import "../styles/dashboard.scss"
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "../context/AuthContext"
+import { getDashboardStats, getMyTickets } from "../services/api"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import addhyan from "../asset/addhyan.jpeg"
-import ChartComponent from "../component/ChartComponent"
-import TicketChart from "../component/TicketChart.jsx"
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { faTicket, faClock, faCircleCheck, faStopwatch, faBusinessTime } from "@fortawesome/free-solid-svg-icons"
+import "../styles/dashboard.scss"
+
+const statusColor = { Pending: "#6b7280", "In Process": "#f59e0b", Working: "#8b5cf6", Resolved: "#10b981", Closed: "#374151" }
+const priorityColor = { Low: "#10b981", Medium: "#f59e0b", High: "#ef4444", Critical: "#7c3aed" }
 
 export default function Dashboard() {
-    const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext)
+  const [stats, setStats] = useState(null)
+  const [recentTickets, setRecentTickets] = useState([])
+  const [loading, setLoading] = useState(true)
 
+  const isAdmin = user?.role === "admin"
+  const isTechnician = user?.role === "technician"
+  const isUser = user?.role === "user"
 
-    const technicians = [
-        {
-          name: "Sarah Jenkins",
-          role: "Network Specialist",
-          status: "Available",
-          activeTickets: 0,
-          avatar: addhyan
-        },
-        {
-          name: "Michael Lee",
-          role: "System Administrator",
-          status: "Busy",
-          activeTickets: 3,
-          avatar: addhyan
-        },
-        {
-          name: "Emily Davis",
-          role: "Help Desk Technician",
-          status: "Available",
-          activeTickets: 1,
-          avatar: addhyan
-        },
-        {
-          name: "David Wilson",
-          role: "IT Support Specialist",
-          status: "Busy",
-          activeTickets: 5,
-          avatar: addhyan
+  useEffect(() => {
+    const load = async () => {
+      try {
+        if (isAdmin || isTechnician) {
+          const data = await getDashboardStats()
+          setStats(data.stats || {})
+          setRecentTickets(data.recentTickets || [])
+        } else {
+          const tickets = await getMyTickets()
+          const arr = Array.isArray(tickets) ? tickets : []
+          setRecentTickets(arr.slice(0, 5))
+          setStats({
+            total: arr.length,
+            pending: arr.filter(t => t.status === "Pending").length,
+            inProcess: arr.filter(t => t.status === "In Process").length,
+            working: arr.filter(t => t.status === "Working").length,
+            resolved: arr.filter(t => t.status === "Resolved").length,
+            closed: arr.filter(t => t.status === "Closed").length,
+          })
         }
-      ];
+      } catch (err) { console.error(err) }
+      setLoading(false)
+    }
+    if (user) load()
+  }, [user])
 
-return (
+  const getGreeting = () => {
+    const h = new Date().getHours()
+    if (h < 12) return "Good Morning"
+    if (h < 17) return "Good Afternoon"
+    return "Good Evening"
+  }
 
+  // Admin stat cards
+  const adminCards = [
+    { label: "Total Tickets", val: stats?.total ?? 0, icon: faTicket, color: "#8b5cf6", bg: "#ede9fe" },
+    { label: "Pending", val: stats?.pending ?? 0, icon: faClock, color: "#f59e0b", bg: "#fef9c3" },
+    { label: "In Process", val: stats?.inProcess ?? 0, icon: faStopwatch, color: "#3b82f6", bg: "#dbeafe" },
+    { label: "Working", val: stats?.working ?? 0, icon: faBusinessTime, color: "#8b5cf6", bg: "#ede9fe" },
+    { label: "Resolved", val: stats?.resolved ?? 0, icon: faCircleCheck, color: "#10b981", bg: "#dcfce7" },
+    { label: "Overdue", val: stats?.overdue ?? 0, icon: faBusinessTime, color: "#ef4444", bg: "#fee2e2" },
+  ]
 
+  // Technician stat cards
+  const techCards = [
+    { label: "Assigned", val: stats?.assigned ?? 0, icon: faTicket, color: "#f59e0b", bg: "#fef9c3" },
+    { label: "Working", val: stats?.working ?? 0, icon: faStopwatch, color: "#8b5cf6", bg: "#ede9fe" },
+    { label: "Resolved", val: stats?.resolved ?? 0, icon: faCircleCheck, color: "#10b981", bg: "#dcfce7" },
+    { label: "Total", val: stats?.total ?? 0, icon: faBusinessTime, color: "#3b82f6", bg: "#dbeafe" },
+  ]
 
+  // User stat cards
+  const userCards = [
+    { label: "My Tickets", val: stats?.total ?? 0, icon: faTicket, color: "#8b5cf6", bg: "#ede9fe" },
+    { label: "Pending", val: stats?.pending ?? 0, icon: faClock, color: "#f59e0b", bg: "#fef9c3" },
+    { label: "In Process", val: (stats?.inProcess ?? 0) + (stats?.working ?? 0), icon: faStopwatch, color: "#3b82f6", bg: "#dbeafe" },
+    { label: "Resolved", val: stats?.resolved ?? 0, icon: faCircleCheck, color: "#10b981", bg: "#dcfce7" },
+  ]
 
-<div className="dashboard">
+  const statCards = isAdmin ? adminCards : isTechnician ? techCards : userCards
 
+  return (
+    <div className="dashboard">
+      <div className="dashboard-container">
 
-<div className="dashboard-container">
-
-    <div className="dashboard-header">  
-        <div>
-            <h1>Good Morning, {user?.name}</h1>
-<p>Here's what's happening in the support center today.</p>
-        </div>
-        <div className="dashboard-actions">
-             <select name="severity"  className="form-select">
-<option>Today</option>
-<option>Yesterday</option>
-<option>Last 7 days</option>
-<option>Last 30 days</option>
-<option>Last 90 days</option>
-</select>
-
-<button className="Export"><FontAwesomeIcon icon={faDownload} /> Export</button>
-
-        </div>
-
-    </div>
-
-{/* TOP STATS */}
-
-<div className="top-stats">
-
-<div className="stat ">
-
-    <div className="stat-top">
-    <div className="start-text">
-        <p className="card-title">Total Ticket</p>
-        <h3 className="card-number">1,245</h3>
-    </div>
-    <div className="stat-icon icon-purple">
-        <FontAwesomeIcon icon={faTicket} />
-
-    </div>
-    </div>
-    
-    <div className="card-stats">
-    <span className="badge-success">↑ 12%</span>
-    <span className="card-subtext">vs last month</span>
- </div>
-
-</div>
-
-
-
-<div className="stat  ">
-
-    <div className="stat-top">
-    <div className="start-text">
-        <p className="card-title">Pending Assign</p>
-        <h3 className="card-number">45</h3>
-    </div>
-    <div className="stat-icon icon-yellow">
-        <FontAwesomeIcon icon={faClock} />
-
-    </div>
-    </div>
-    
-    <div className="card-stats">
-    <span className="badge-danger">↓ 12%</span>
-    <span className="card-subtext">vs last month</span>
- </div>
-
-</div>
-
-
-<div className="stat ">
-
-    <div className="stat-top">
-    <div className="start-text">
-        <p className="card-title">Resolved Today</p>
-        <h3 className="card-number">82</h3>
-    </div>
-    <div className="stat-icon icon-green">
-        <FontAwesomeIcon icon={faCircleCheck} />
-
-    </div>
-    </div>
-    
-    <div className="card-stats">
-    <span className="badge-success">↑ 18%</span>
-    <span className="card-subtext">vs last month</span>
- </div>
-
-</div>
-
-
-<div className="stat ">
-
-    <div className="stat-top">
-    <div className="start-text">
-        <p className="card-title">Avg. Resolution </p>
-        <h3 className="card-number">1.5h</h3>
-    </div>
-    <div className="stat-icon icon-blue">
-        <FontAwesomeIcon icon={faStopwatch} />
-
-    </div>
-    </div>
-    
-    <div className="card-stats">
-    <span className="badge-success">↑ 12%</span>
-    <span className="card-subtext">vs last month</span>
- </div>
-
-</div>  
-
-
-<div className="stat  ">
-
-    <div className="stat-top">
-    <div className="start-text">
-        <p className="card-title">Overdue Tickets</p>
-        <h3 className="card-number">15</h3>
-    </div>
-    <div className="stat-icon icon-red">
-        <FontAwesomeIcon icon={faBusinessTime} />
-
-    </div>
-    </div>
-    
-    <div className="card-stats">
-    <span className="badge-success">↑ 12%</span>
-    <span className="card-subtext">vs last month</span>
- </div>
-
-</div>
-
-
-</div>
-
-
-{/* MAIN SECTION */}
-
-{/* Addhyan main grid for two column layout and right stats panel */} 
-
-<div className="main-grid-new">
-        <div className="main-left">
-            <TicketChart />
-
+        {/* Header */}
+        <div className="dashboard-header">
+          <div>
+            <h1>{getGreeting()}, {user?.name} 👋</h1>
+            <p style={{ color: "#666", marginTop: 4 }}>
+              {isAdmin ? "Here's your IT Help Desk overview" :
+               isTechnician ? "Here are your assigned tickets overview" :
+               "Here are your support tickets"}
+            </p>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{
+              padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 600,
+              background: isAdmin ? "#dbeafe" : isTechnician ? "#fef9c3" : "#dcfce7",
+              color: isAdmin ? "#1d4ed8" : isTechnician ? "#a16207" : "#166534"
+            }}>
+              {isAdmin ? "👑 Admin" : isTechnician ? "🔧 Technician" : "👤 User"}
+            </span>
+          </div>
         </div>
 
-
-        <div className="main-right">
-            <h4>Technician Status</h4>
-            {/* Technician status section */ }
-            {technicians.map((tech, index) => (
-                <div className="tech-item" key={index}>
-
-                    <div className="tech-left">
-                        <div className="avatar">
-                            <img src={tech.avatar} alt="userimage" />
-                            <span className={`status-dot ${tech.status === "Available" ? "online" : "busy"}`}></span>
-                        </div>
-
-                        <div className="tech-info">
-                            <h4 className="card-title card-font">{tech.name}</h4>
-                            <p className="card-title">{tech.role}</p>
-                        </div>
-                    </div>
-
-                    <div className="tech-right">
-                        <span className={`badge ${tech.status === "Available" ? "available" : "busy"}`}>{tech.status}</span>
-                        <p className="ticket-count">{tech.activeTickets} Active Tickets</p>
-                    </div>
+        {/* Stats Cards */}
+        {loading ? (
+          <div style={{ padding: 40, textAlign: "center", color: "#999" }}>Loading stats...</div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 16, marginBottom: 28 }}>
+            {statCards.map(card => (
+              <div key={card.label} style={{
+                background: "#fff", borderRadius: 14, padding: "20px",
+                border: `1px solid ${card.color}33`, boxShadow: "0 1px 6px rgba(0,0,0,0.06)"
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <div>
+                    <p style={{ margin: 0, fontSize: 13, color: "#666" }}>{card.label}</p>
+                    <h2 style={{ margin: "6px 0 0", fontSize: 28, fontWeight: 700, color: card.color }}>{card.val}</h2>
+                  </div>
+                  <div style={{ background: card.bg, borderRadius: 10, padding: "10px", color: card.color }}>
+                    <FontAwesomeIcon icon={card.icon} style={{ fontSize: 18 }} />
+                  </div>
                 </div>
-            ))}   
+              </div>
+            ))}
+          </div>
+        )}
 
-            <div><button className="create-button">View All </button></div>
+        {/* Main Grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 20 }}>
 
-
+          {/* Recent Tickets */}
+          <div style={{ background: "#fff", borderRadius: 14, border: "1px solid #e5e7eb", overflow: "hidden" }}>
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid #f0f0f0", display: "flex", justifyContent: "space-between" }}>
+              <h4 style={{ margin: 0 }}>Recent Tickets</h4>
+              <span style={{ fontSize: 13, color: "#3b82f6" }}>{recentTickets.length} tickets</span>
             </div>
-
-</div>
-
-
-<div className="main-grid-two">
-    <div className="main-left-two">
-
-    </div>
-   
-    <div className="main-left-two">
-        <h4>Recent <span className="    ">Critical</span>  Task</h4>
-            <table className="recent-tasks-table">
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>ID</th>
-                        <th>Status</th>
-                        <th>Priority</th>
-                    </tr>
-
-
-
+            {recentTickets.length === 0 ? (
+              <div style={{ padding: 40, textAlign: "center", color: "#999" }}>
+                <p style={{ fontSize: 32 }}>🎫</p>
+                <p>No tickets yet</p>
+              </div>
+            ) : (
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead style={{ background: "#f9fafb" }}>
+                  <tr>
+                    {["Ticket ID", "Title", isAdmin ? "For User" : "Category", "Priority", "Status"].map(h => (
+                      <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 12, color: "#666", fontWeight: 600, borderBottom: "1px solid #e5e7eb" }}>{h}</th>
+                    ))}
+                  </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Application access issue</td>
-                        <td>2119197</td>
-                        <td>Open</td>
-                        <td><span className="badge badge-critical">Critical</span></td>
+                  {recentTickets.map(ticket => (
+                    <tr key={ticket._id} style={{ borderBottom: "1px solid #f9f9f9" }}>
+                      <td style={{ padding: "12px 16px", fontFamily: "monospace", fontSize: 12, color: "#666" }}>{ticket.ticketId}</td>
+                      <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 500, maxWidth: 180 }}>{ticket.title}</td>
+                      <td style={{ padding: "12px 16px", fontSize: 13, color: "#666" }}>
+                        {isAdmin ? (ticket.reportedFor?.name || ticket.createdBy?.name) : ticket.category}
+                      </td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <span style={{ padding: "3px 8px", borderRadius: 12, fontSize: 11, fontWeight: 600, background: priorityColor[ticket.priority] + "22", color: priorityColor[ticket.priority] }}>
+                          {ticket.priority}
+                        </span>
+                      </td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <span style={{ padding: "3px 8px", borderRadius: 12, fontSize: 11, fontWeight: 600, background: statusColor[ticket.status] + "22", color: statusColor[ticket.status] }}>
+                          {ticket.status}
+                        </span>
+                      </td>
                     </tr>
-
-                    <tr>
-                        <td>Upgrade VM plan</td>
-                        <td>2119196</td>
-                        <td>Open</td>
-                        <td><span className="badge badge-high">High</span></td>
-                    </tr>
-
-                    <tr>
-                        <td>Cancel existing VM plan</td>
-                        <td>2119192</td>
-                        <td>Open</td>
-                        <td><span className="badge badge-high">High</span></td>
-                    </tr>
-
-                    <tr>
-                        <td>Upgrade VM plan</td>
-                        <td>2119188</td>
-                        <td>Open</td>
-                        <td><span className="badge badge-high">High</span></td>
-                    </tr>
-
+                  ))}
                 </tbody>
+              </table>
+            )}
+          </div>
 
-            </table>    
+          {/* Right Panel */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
-            <div><button className="create-button">View All</button></div>
-    </div>
+            {/* Admin - Technician Status */}
+            {isAdmin && stats?.technicians && (
+              <div style={{ background: "#fff", borderRadius: 14, border: "1px solid #e5e7eb", padding: 20 }}>
+                <h4 style={{ margin: "0 0 16px" }}>👥 Technician Status</h4>
+                {stats.technicians.length === 0 ? (
+                  <p style={{ color: "#999", fontSize: 13 }}>No technicians found</p>
+                ) : stats.technicians.map(tech => (
+                  <div key={tech._id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #f5f5f5" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#dbeafe", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>
+                        {tech.profilePicture ? <img src={tech.profilePicture} alt="" style={{ width: 36, height: 36, borderRadius: "50%", objectFit: "cover" }} /> : "👤"}
+                      </div>
+                      <div>
+                        <p style={{ margin: 0, fontWeight: 600, fontSize: 13 }}>{tech.name}</p>
+                        <p style={{ margin: 0, fontSize: 11, color: "#999" }}>{tech.email}</p>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <span style={{ fontSize: 12, background: tech.activeTickets > 0 ? "#fef9c3" : "#dcfce7", color: tech.activeTickets > 0 ? "#a16207" : "#166534", padding: "2px 8px", borderRadius: 12, fontWeight: 600 }}>
+                        {tech.activeTickets} active
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
+            {/* Quick Actions */}
+            <div style={{ background: "#fff", borderRadius: 14, border: "1px solid #e5e7eb", padding: 20 }}>
+              <h4 style={{ margin: "0 0 14px" }}>⚡ Quick Actions</h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {isUser && (
+                  <a href="/dashboard/create-ticket" style={{ padding: "10px 16px", background: "#3b82f6", color: "#fff", borderRadius: 8, textDecoration: "none", textAlign: "center", fontWeight: 600, fontSize: 14 }}>
+                    + Create New Ticket
+                  </a>
+                )}
+                {isAdmin && (<>
+                  <a href="/dashboard/admin" style={{ padding: "10px 16px", background: "#3b82f6", color: "#fff", borderRadius: 8, textDecoration: "none", textAlign: "center", fontWeight: 600, fontSize: 14 }}>
+                    📋 View All Tickets
+                  </a>
+                  <a href="/dashboard/users" style={{ padding: "10px 16px", background: "#f0fdf4", color: "#166534", borderRadius: 8, textDecoration: "none", textAlign: "center", fontWeight: 600, fontSize: 14, border: "1px solid #bbf7d0" }}>
+                    👥 Manage Users
+                  </a>
+                  <a href="/dashboard/create-ticket" style={{ padding: "10px 16px", background: "#fef9c3", color: "#a16207", borderRadius: 8, textDecoration: "none", textAlign: "center", fontWeight: 600, fontSize: 14, border: "1px solid #fde68a" }}>
+                    + Create Ticket for User
+                  </a>
+                </>)}
+                {isTechnician && (<>
+                  <a href="/dashboard/technician" style={{ padding: "10px 16px", background: "#3b82f6", color: "#fff", borderRadius: 8, textDecoration: "none", textAlign: "center", fontWeight: 600, fontSize: 14 }}>
+                    🔧 My Assigned Tickets
+                  </a>
+                  <a href="/dashboard/create-ticket" style={{ padding: "10px 16px", background: "#f0fdf4", color: "#166534", borderRadius: 8, textDecoration: "none", textAlign: "center", fontWeight: 600, fontSize: 14, border: "1px solid #bbf7d0" }}>
+                    + Create Ticket for User
+                  </a>
+                </>)}
+              </div>
+            </div>
 
-     <div className="main-left-two">
-        <h4>Recent Tickets</h4>
-        <ChartComponent />
+          </div>
         </div>
-    
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-<div className="main-grid">
-
-{/* LEFT PANEL */}
-
-<div className="tasks-panel">
-
-<h4>Open Tasks</h4>
-
-<ul>
-
-<li>
-<h6>Login credentials</h6>
-<span>Status: Open</span>
-</li>
-
-<li>
-<h6>Setting up user workstation</h6>
-<span>Status: Open</span>
-</li>
-
-<li>
-<h6>Reported problem analysis</h6>
-<span>Status: Open</span>
-</li>
-
-<li>
-<h6>Test ERP system functionality</h6>
-<span>Status: Open</span>
-</li>
-
-</ul>
-
-</div>
-
-
-{/* CENTER PANEL */}
-
-<div className="requests-panel">
-
-<h4>Open Requests</h4>
-
-<table>
-
-<thead>
-<tr>
-<th>Subject</th>
-<th>ID</th>
-<th>Status</th>
-<th>Priority</th>
-</tr>
-</thead>
-
-<tbody>
-
-<tr>
-<td>Application access issue</td>
-<td>2119197</td>
-<td>Open</td>
-<td>Critical</td>
-</tr>
-
-<tr>
-<td>Upgrade VM plan</td>
-<td>2119196</td>
-<td>Open</td>
-<td>High</td>
-</tr>
-
-<tr>
-<td>Cancel existing VM plan</td>
-<td>2119192</td>
-<td>Open</td>
-<td>High</td>
-</tr>
-
-<tr>
-<td>Upgrade VM plan</td>
-<td>2119188</td>
-<td>Open</td>
-<td>High</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-
-{/* RIGHT PANEL */}
-
-<div className="side-stats">
-
-<div className="side-card yellow">
-<h2 className="card-number">11</h2>
-<p className="card-title">Pending Assignment</p>
-</div>
-
-<div className="side-card purple">
-<h2>87</h2>
-<p>Pending Approval</p>
-</div>
-
-<div className="side-card gradient2">
-
-<h3>Req. Inflow</h3>
-
-<div className="inflow">
-<div>
-<h2>1</h2>
-<span>Last 24 hours</span>
-</div>
-
-<div>
-<h2>10</h2>
-<span>Last 7 days</span>
-</div>
-
-<div>
-<h2>23</h2>
-<span>Last 30 days</span>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-
-)
+      </div>
+    </div>
+  )
 }

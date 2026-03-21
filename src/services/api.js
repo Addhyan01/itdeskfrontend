@@ -117,3 +117,17 @@ export const markAllNotificationsRead = async () => {
   const res = await fetch(`${API_BASE}/notifications/read-all`, { method: "PUT", headers: authHeaders() });
   return res.json();
 };
+
+// ── ADMIN - User/Tech Management ──────────────────────────
+export const createUser = async (data) => {
+  const res = await fetch(`${API_BASE}/admin/create-user`, { method: "POST", headers: authHeaders(), body: JSON.stringify(data) });
+  return res.json();
+};
+export const getUsersWithTickets = async () => {
+  const res = await fetch(`${API_BASE}/admin/users-with-tickets`, { headers: authHeaders() });
+  return res.json();
+};
+export const getTechniciansWithStats = async () => {
+  const res = await fetch(`${API_BASE}/admin/technicians-with-stats`, { headers: authHeaders() });
+  return res.json();
+};

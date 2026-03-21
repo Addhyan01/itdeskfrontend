@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { getAssignedTickets, getResolvedTickets, updateTicketStatus, reopenTicket, addComment } from "../services/api"
 import { toast } from "react-toastify"
 import SLABadge from "../component/SLABadge"
+import AttachmentViewer from "../component/AttachmentViewer"
 
 const priorityColor = { Low: "#10b981", Medium: "#f59e0b", High: "#ef4444", Critical: "#7c3aed" }
 const statusColor = { Pending: "#6b7280", "In Process": "#f59e0b", Working: "#8b5cf6", Resolved: "#10b981", Closed: "#374151" }
@@ -86,6 +87,9 @@ export default function TechnicianPanel() {
       {expanded === ticket._id && (
         <div style={{ borderTop: "1px solid #f0f0f0", padding: "16px 20px", background: "#fafafa" }}>
           <p style={{ color: "#555", fontSize: 14, marginBottom: 16 }} dangerouslySetInnerHTML={{ __html: ticket.description }} />
+
+          {/* ── ATTACHMENTS ── */}
+          <AttachmentViewer attachments={ticket.attachments} />
 
           {/* Comments */}
           {ticket.comments?.length > 0 && (

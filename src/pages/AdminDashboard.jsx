@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { getAllTickets, assignTicket, getAllTechnicians, getDashboardStats, deleteTicket, modifyTicket, reopenTicket } from "../services/api"
 import { toast } from "react-toastify"
 import SLABadge from "../component/SLABadge"
+import AttachmentViewer from "../component/AttachmentViewer"
 
 const statusColor = { Pending: "#6b7280", "In Process": "#f59e0b", Working: "#8b5cf6", Resolved: "#10b981", Closed: "#374151" }
 const priorityColor = { Low: "#10b981", Medium: "#f59e0b", High: "#ef4444", Critical: "#7c3aed" }
@@ -137,9 +138,20 @@ export default function AdminDashboard() {
                     <h4 style={{ margin: "0 0 6px", fontSize: 15 }}>{ticket.title}</h4>
                     <p style={{ margin: "0 0 8px", fontSize: 13, color: "#666" }}>By: {ticket.createdBy?.name} ({ticket.createdBy?.role})</p>
                     <SLABadge slaStatus={ticket.slaStatus} slaHours={ticket.slaHours} createdAt={ticket.createdAt} dueDate={ticket.dueDate} />
+                    {ticket.attachments?.length > 0 && (
+                      <span style={{ fontSize: 12, background: "#f0f9ff", color: "#0369a1", padding: "3px 10px", borderRadius: 20, marginTop: 6, display: "inline-block" }}>
+                        📎 {ticket.attachments.length} attachment{ticket.attachments.length > 1 ? "s" : ""}
+                      </span>
+                    )}
                   </div>
 
-                  {/* Actions */}
+                  {/* Attachments inline */}
+                  {ticket.attachments?.length > 0 && (
+                    <div style={{ marginTop: 8, width: "100%" }}>
+                      <AttachmentViewer attachments={ticket.attachments} />
+                    </div>
+                  )}
+                {/* Actions */}
                   <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 200 }}>
                     {ticket.status === "Pending" && (
                       <>
