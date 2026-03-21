@@ -29,7 +29,8 @@ export default function TechnicianPanel() {
   const [expanded, setExpanded] = useState(null)
   const [updating, setUpdating] = useState(null)
   const [selected, setSelected] = useState({})
-  const [comments, setComments] = useState({})
+  const [comments, setComments] = useState({})      // ← sirf comment ke liye
+  const [resNotes, setResNotes] = useState({})       // ← sirf resolution note ke liye
   const [dueDates, setDueDates] = useState({})
 
   const currentTab = TABS.find(t => t.key === activeTab)
@@ -47,7 +48,6 @@ export default function TechnicianPanel() {
   useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
     loadData() }, [])
 
-  // Filter + paginate
   useEffect(() => {
     const source = activeSection === "assigned" ? allAssigned : resolvedTickets
     let filtered = source
@@ -64,7 +64,7 @@ export default function TechnicianPanel() {
     setTotalPages(Math.ceil(total / PER_PAGE) || 1)
     const start = (currentPage - 1) * PER_PAGE
     setTickets(filtered.slice(start, start + PER_PAGE))
-  }, [allAssigned, resolvedTickets, activeSection, activeTab, search, currentPage])
+  }, [allAssigned, resolvedTickets, activeSection, activeTab, search, currentPage]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { setCurrentPage(1) }, [activeSection, activeTab, search])
 
@@ -73,12 +73,13 @@ export default function TechnicianPanel() {
     if (!status) { toast.warn("Select a status"); return }
     setUpdating(ticketId)
     try {
-      const res = await updateTicketStatus(ticketId, status, comments[ticketId] || "", dueDates[ticketId] || "")
+      // resNotes use karo resolution note ke liye
+      const res = await updateTicketStatus(ticketId, status, resNotes[ticketId] || "", dueDates[ticketId] || "")
       if (res.ticket) {
         toast.success("✅ Updated! User notified.")
         loadData()
         setSelected(p => ({ ...p, [ticketId]: "" }))
-        setComments(p => ({ ...p, [ticketId]: "" }))
+        setResNotes(p => ({ ...p, [ticketId]: "" }))  // ← resNotes clear karo
       } else toast.error(res.message)
     } catch { toast.error("Update failed") }
     setUpdating(null)
@@ -93,7 +94,11 @@ export default function TechnicianPanel() {
   const handleComment = async (ticketId) => {
     if (!comments[ticketId]?.trim()) return
     const res = await addComment(ticketId, comments[ticketId])
-    if (res.comments) { toast.success("Comment added!"); setComments(p => ({ ...p, [ticketId]: "" })); loadData() }
+    if (res.comments) {
+      toast.success("Comment added!")
+      setComments(p => ({ ...p, [ticketId]: "" }))  // ← sirf comments clear karo
+      loadData()
+    }
     else toast.error(res.message)
   }
 
@@ -160,7 +165,7 @@ export default function TechnicianPanel() {
             </div>
           )}
 
-          {/* Update Status */}
+          {/* Update Status - resNotes use karo */}
           {!showReopen && ticket.status !== "Resolved" && (
             <div style={{ background: "#f0fdf4", borderRadius: 10, padding: 14, marginBottom: 10 }}>
               <p style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Update Status</p>
@@ -174,8 +179,10 @@ export default function TechnicianPanel() {
                 <input type="date" value={dueDates[ticket._id] || ""} onChange={e => setDueDates({ ...dueDates, [ticket._id]: e.target.value })}
                   style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid #ddd", fontSize: 13 }} />
               </div>
-              <input type="text" placeholder="Resolution note..." value={comments[ticket._id] || ""}
-                onChange={e => setComments({ ...comments, [ticket._id]: e.target.value })}
+              {/* ← resNotes use karo yahan */}
+              <input type="text" placeholder="Resolution note..."
+                value={resNotes[ticket._id] || ""}
+                onChange={e => setResNotes({ ...resNotes, [ticket._id]: e.target.value })}
                 style={{ width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid #ddd", fontSize: 13, marginTop: 8, boxSizing: "border-box" }} />
               <button onClick={() => handleUpdate(ticket._id)} disabled={updating === ticket._id}
                 style={{ marginTop: 10, padding: "8px 20px", background: "#10b981", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 600 }}>
@@ -184,9 +191,11 @@ export default function TechnicianPanel() {
             </div>
           )}
 
-          {/* Add Comment */}
+          {/* Add Comment - comments use karo */}
           <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-            <input type="text" placeholder="Add comment..." value={comments[ticket._id] || ""}
+            {/* ← comments use karo yahan */}
+            <input type="text" placeholder="Add comment..."
+              value={comments[ticket._id] || ""}
               onChange={e => setComments({ ...comments, [ticket._id]: e.target.value })}
               style={{ flex: 1, padding: "8px 12px", borderRadius: 8, border: "1px solid #ddd", fontSize: 13 }}
               onKeyDown={e => e.key === "Enter" && handleComment(ticket._id)} />
@@ -238,7 +247,7 @@ export default function TechnicianPanel() {
         ))}
       </div>
 
-      {/* Status Tabs (only for assigned) */}
+      {/* Status Tabs */}
       {activeSection === "assigned" && (
         <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
           {TABS.map(tab => (
