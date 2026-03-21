@@ -1,8 +1,11 @@
-import React, {  useState } from 'react'
+import React, {  useState, useContext, useEffect } from 'react'
 import "../styles/createticket.scss"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudArrowUp, faComments, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { AuthContext } from "../context/AuthContext";
+
 import { Link } from 'react-router-dom'
+
 import {   Editor,
   EditorProvider,
   Toolbar,
@@ -12,9 +15,40 @@ import {   Editor,
   BtnBulletList,
   BtnNumberedList, } from "react-simple-wysiwyg";
 
+  
+
 const CreateTicket = () => {
+  const { user, setUser } = useContext(AuthContext);
+  
 
     const [description, setDescription] = useState("")
+     const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    role: "",
+    });
+
+    useEffect(() => {
+    
+    
+    if (user) {
+    
+      setProfile({
+        name: user.name || "",
+        email: user.email || "",
+        role: user.role || "",
+      });
+    
+    
+    }
+    
+    }, [user]);
+
+   
+    
+
+
+    
   return (
     <div className="ticket-page">
       
@@ -55,6 +89,11 @@ const CreateTicket = () => {
               </select>
             </div>
 
+            <div className="form-group">
+              <label>Created By <span className='spanrequired'>*</span></label>
+              <input type="text" value={profile.name} disabled/>
+            </div>
+
           </div>
 
           <div className="form-group">
@@ -85,7 +124,7 @@ const CreateTicket = () => {
                 <FontAwesomeIcon icon={faCloudArrowUp   } />
               <p>Click to upload or drag and drop</p>
               <span>PNG, JPG, PDF up to 10MB</span>
-              <input type="file" />
+              <input type="file" multiple/>
             </div>
 
           </div>

@@ -3,6 +3,7 @@ import "../styles/profile.scss";
 import { AuthContext } from "../context/AuthContext";
 import { updateProfile } from "../services/api";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 
 function ProfileSettings() {
@@ -368,8 +369,11 @@ return (
       <button
         type="button"
         className="cancel"
+
       >
-        Cancel
+        <Link to="/dashboard">
+          Cancel
+        </Link>
       </button>
 
       <button
