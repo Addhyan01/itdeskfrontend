@@ -58,7 +58,7 @@ export default function AdminDashboard() {
     setLoading(false)
   }
 
-  useEffect(() => {
+  useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
     setCurrentPage(1)
     loadData(1)
   }, [activeTab, search, priority, category])

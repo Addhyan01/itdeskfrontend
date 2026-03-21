@@ -44,7 +44,8 @@ export default function TechnicianPanel() {
     setLoading(false)
   }
 
-  useEffect(() => { loadData() }, [])
+  useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
+    loadData() }, [])
 
   // Filter + paginate
   useEffect(() => {

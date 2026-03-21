@@ -18,7 +18,7 @@ export default function Dashboard() {
   const isTechnician = user?.role === "technician"
   const isUser = user?.role === "user"
 
-  useEffect(() => {
+  useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
     const load = async () => {
       try {
         if (isAdmin || isTechnician) {

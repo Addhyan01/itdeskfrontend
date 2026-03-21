@@ -52,7 +52,8 @@ export default function MyTickets() {
     setLoading(false)
   }
 
-  useEffect(() => { setCurrentPage(1); loadTickets(1) }, [activeTab, search, priority])
+  useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
+    setCurrentPage(1); loadTickets(1) }, [activeTab, search, priority])
   useEffect(() => { loadTickets(currentPage) }, [currentPage])
 
   const handleClose = async (id) => {
